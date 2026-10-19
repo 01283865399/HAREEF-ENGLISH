@@ -12,7 +12,7 @@
 2. من **Project → Settings → General** اضبط **Root Directory** على `website`. يحتوي هذا المجلد `package.json` و`package-lock.json` و`api/chat.js` و`vercel.json`.
 3. اذهب إلى **Project → Settings → Environment Variables**.
 4. أضف `GEMINI_API_KEY` بقيمة المفتاح، وحدد البيئات المطلوبة.
-5. أضف `GEMINI_MODEL` بالقيمة `gemini-3.8-flash` إذا أردت تثبيت الموديل؛ إن لم تضفه فسيستخدم الخادم هذا الموديل افتراضيًا. إذا أعاد الموديل المحدد حالة 404، يعيد الخادم المحاولة تلقائيًا باستخدام `gemini-3.8-flash`.
+5. أضف `GEMINI_MODEL` بالقيمة `gemini-2.5-flash` إذا أردت تثبيت الموديل؛ إن لم تضفه فسيستخدم الخادم هذا الموديل افتراضيًا. إذا أعاد الموديل المحدد حالة 404، يعيد الخادم المحاولة تلقائيًا باستخدام `gemini-2.5-flash`.
 6. في **Project → Settings → Build and Deployment** امسح أي **Install Command** أو **Build Command** مخصص، واترك Vercel يكتشف npm وVite تلقائيًا. لا تستخدم `--prefix website` عند ضبط Root Directory على `website`؛ سيبحث npm عندها في `website/website`.
 7. نفّذ **Redeploy** لآخر نشر حتى تُحمّل الإعدادات ومتغيرات البيئة.
 
@@ -22,7 +22,7 @@
 
 ```dotenv
 GEMINI_API_KEY=ضع_مفتاحك_محليًا
-GEMINI_MODEL=gemini-3.8-flash
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 ثم شغّل:

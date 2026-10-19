@@ -220,8 +220,8 @@ export default async function handler(req, res) {
       message: "تعذر تشغيل الخدمة الذكية حاليًا.",
     });
   }
-  let model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-  const fallbackModel = "gemini-3.8-flash";
+  let model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const fallbackModel = "gemini-2.5-flash";
   const contents = [
     ...input.history.map(({ role, text }) => ({
       role,

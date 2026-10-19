@@ -186,7 +186,7 @@ describe("Gemini serverless function validation", () => {
         expect(JSON.parse(res.body)).toEqual({ error: "ai_failed" });
         expect(res.body).not.toContain("test-secret-key");
         expect(res.body).not.toContain("NOT_FOUND");
-        expect(log).toHaveBeenCalledTimes(2);
+        expect(log).toHaveBeenCalledOnce();
         const diagnostic = JSON.parse(
           log.mock.calls[0][0].replace("[Gemini] ", ""),
         );
@@ -205,7 +205,7 @@ describe("Gemini serverless function validation", () => {
     }
   });
 
-  it("retries a 404 model with gemini-3.8-flash", async () => {
+  it("retries an unavailable configured model with gemini-2.5-flash", async () => {
     const originalFetch = globalThis.fetch;
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     const fetchMock = vi
@@ -228,7 +228,7 @@ describe("Gemini serverless function validation", () => {
         }),
       });
     globalThis.fetch = fetchMock;
-    vi.stubEnv("GEMINI_MODEL", "gemini-2.5-flash");
+    vi.stubEnv("GEMINI_MODEL", "unavailable-model");
     try {
       await withTestKey(async () => {
         const res = mockResponse();
@@ -244,10 +244,10 @@ describe("Gemini serverless function validation", () => {
         expect(JSON.parse(res.body)).toEqual({ reply: "الفاعل مرفوع." });
         expect(fetchMock).toHaveBeenCalledTimes(2);
         expect(fetchMock.mock.calls[0][0]).toContain(
-          "/models/gemini-2.5-flash:",
+          "/models/unavailable-model:",
         );
         expect(fetchMock.mock.calls[1][0]).toContain(
-          "/models/gemini-3.8-flash:",
+          "/models/gemini-2.5-flash:",
         );
         expect(log).toHaveBeenCalledOnce();
       });
