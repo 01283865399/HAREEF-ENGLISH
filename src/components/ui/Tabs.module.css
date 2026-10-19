@@ -1,0 +1,29 @@
+.list {
+  display: flex;
+  overflow-x: auto;
+  width: fit-content;
+  max-width: 100%;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.tab {
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  border-block-end: 0;
+  background: transparent;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.active {
+  background: var(--grad-primary);
+  color: var(--on-primary);
+  font-weight: 600;
+}

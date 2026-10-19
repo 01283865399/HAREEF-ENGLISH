@@ -1,0 +1,45 @@
+.page { display:grid; width:min(1180px,calc(100% - 2.5rem)); gap:16px; margin-inline:auto; padding-block:22px 56px; }
+.breadcrumb { display:flex; flex-wrap:wrap; align-items:center; gap:7px; color:var(--muted); font-size:12px; }
+.breadcrumb a { color:var(--p); font-weight:800; }
+.contentGrid { display:grid; grid-template-columns:minmax(0,1fr) 340px; align-items:start; gap:17px; }
+.mainColumn,.sidebar { display:grid; min-width:0; gap:14px; }
+.videoCard,.panel,.contentCard,.teacherCard { overflow:hidden; border:1px solid var(--line)!important; border-radius:19px!important; background:var(--surface)!important; box-shadow:var(--shadow-card)!important; }
+.videoCard { padding:0!important; }
+.videoWrapper { position:relative; aspect-ratio:16/9; overflow:hidden; background:var(--brand-deep); }
+.videoEmbed { position:absolute; inset:0; width:100%; height:100%; border:0; }
+.poster { position:absolute; inset:0; display:grid; align-content:center; justify-items:center; gap:10px; background:var(--grad-primary); color:var(--on-primary); text-align:center; }
+.poster svg { width:48px; height:48px; color:var(--s); }
+.poster h2 { color:var(--on-primary); }
+.videoError { position:absolute; inset:auto 12px 12px; padding:10px; border-radius:10px; background:var(--primary-2-88); color:var(--on-primary); font-size:12px; }
+.metaRow { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px 17px; }
+.metaRow h1 { color:var(--ink); font-size:1.2rem; font-weight:900; }
+.metaRow p { color:var(--muted); font-size:13px; }
+.panel,.contentCard { display:grid; gap:13px; padding:16px!important; }
+.keyPoints { display:grid; gap:7px; }
+.keyPoints button { display:flex; align-items:center; gap:9px; padding:9px 10px; border:1px solid var(--line); border-radius:11px; background:var(--surface); color:var(--ink); cursor:pointer; text-align:start; }
+.keyPoints button:hover { border-color:var(--p); background:var(--p-soft); }
+.keyPointsEmpty { color:var(--muted); font-size:12px; }
+.notesLabel { color:var(--ink); font-size:13px; font-weight:800; }
+.panel textarea { width:100%; min-height:110px; padding:11px; border:1.5px solid var(--line); border-radius:12px; background:var(--input-bg); color:var(--ink); font:inherit; }
+.panel textarea:focus { outline:0; border-color:var(--p); box-shadow:0 0 0 3px var(--primary-2-soft); }
+.error,.saved { padding:9px 11px; border-radius:10px; color:var(--danger); font-size:12px; }
+.saved { background:var(--s-soft); color:var(--s-dark); }
+.sidebar { position:sticky; inset-block-start:78px; }
+.sidebarHeading { display:flex; align-items:center; justify-content:space-between; gap:9px; }
+.sidebarHeading h2 { color:var(--ink); font-size:15px; font-weight:900; }
+.lessonCount { color:var(--muted); font-size:11px; }
+.lessonList { display:grid; gap:6px; }
+.lessonItem { display:grid; grid-template-columns:30px minmax(0,1fr) auto; align-items:center; gap:8px; padding:8px; border:1px solid transparent; border-radius:12px; color:var(--ink); }
+.lessonItem:hover,.lessonCurrent { border-color:var(--p-soft); background:var(--p-soft); }
+.lessonStatus { display:grid; width:28px; height:28px; place-items:center; border-radius:50%; background:var(--surface-soft); color:var(--p); font-size:11px; font-weight:800; }
+.lessonDone { background:var(--s-soft); color:var(--s-dark); }
+.lessonTitle { min-width:0; overflow:hidden; font-size:12px; font-weight:700; text-overflow:ellipsis; white-space:nowrap; }
+.lessonItem small { color:var(--muted); font-size:10px; }
+.teacherCard { display:grid!important; grid-template-columns:42px minmax(0,1fr); align-items:center; gap:10px!important; padding:14px!important; }
+.teacherAvatar { display:grid; width:42px; height:42px; place-items:center; border-radius:50%; background:var(--s-soft); color:var(--s-dark); }
+.teacherCard h3 { color:var(--ink); font-size:13px; }
+.teacherCard p,.studentName { color:var(--muted); font-size:11px; }
+.studentName { grid-column:span 2; padding-block-start:7px; border-block-start:1px solid var(--line); }
+.state { display:grid; justify-items:center; gap:10px; margin:40px auto; padding:23px; border:1px solid var(--line); border-radius:17px; background:var(--surface); color:var(--muted); text-align:center; }
+@media(max-width:980px){.contentGrid{grid-template-columns:1fr}.sidebar{position:static;grid-row:2}}
+@media(max-width:560px){.page{width:calc(100% - 28px);padding-block-start:15px}.metaRow{align-items:flex-start;flex-direction:column;padding:13px}.lessonItem{grid-template-columns:27px minmax(0,1fr) auto;padding:7px}}

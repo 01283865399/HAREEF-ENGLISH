@@ -1,0 +1,45 @@
+.field {
+  display: grid;
+  gap: 7px;
+  margin-block-end: 16px;
+}
+
+.field > label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.control {
+  position: relative;
+  display: flex;
+}
+
+.control input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--input-bg);
+  color: var(--ink);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.control input:focus-visible {
+  outline: 0;
+  border-color: var(--p);
+  box-shadow: 0 0 0 3px var(--primary-2-soft);
+}
+
+.control input::placeholder {
+  color: var(--muted);
+}
+
+.control input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 14px;
+}

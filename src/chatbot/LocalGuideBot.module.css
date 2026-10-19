@@ -1,0 +1,235 @@
+.widget {
+  position: fixed;
+  inset-inline-start: 22px;
+  inset-block-end: max(22px, env(safe-area-inset-bottom));
+  z-index: 999;
+  font-family: var(--font-body);
+}
+
+.launcher {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid var(--accent-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-gold);
+  color: var(--primary-1);
+  cursor: grab;
+  font-weight: 800;
+  touch-action: none;
+  animation: float 3.5s ease-in-out infinite;
+}
+
+.launcher:active {
+  cursor: grabbing;
+}
+
+.avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--grad-accent);
+  color: var(--primary-2);
+}
+
+.launcher svg {
+  width: 22px;
+  height: 22px;
+}
+
+.launcherLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.panel {
+  display: flex;
+  width: min(350px, calc(100vw - 32px));
+  height: min(480px, calc(100dvh - 110px));
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--grad-primary);
+  color: var(--on-primary);
+}
+
+.header > div {
+  flex: 1;
+}
+
+.header h2 {
+  color: var(--on-primary);
+  font-size: 16px;
+}
+
+.header small {
+  color: var(--on-primary-muted);
+}
+
+.close {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--on-primary-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--on-primary);
+  cursor: pointer;
+}
+
+.close svg {
+  width: 18px;
+}
+
+.messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  padding: 14px;
+  background: var(--bg);
+}
+
+.guideMessage,
+.studentMessage {
+  max-width: 88%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  line-height: 1.8;
+}
+
+.guideMessage {
+  align-self: flex-start;
+  background: var(--surface);
+}
+
+.studentMessage {
+  align-self: flex-end;
+  background: var(--surface-soft);
+  color: var(--primary-2);
+}
+
+.guideMessage p,
+.studentMessage p {
+  margin: 0;
+}
+
+.guideMessage a {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.typing {
+  color: var(--text-muted);
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.suggestions span {
+  width: 100%;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.suggestions button {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--primary-1);
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.composer {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.composer input {
+  min-width: 0;
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+}
+
+.composer button {
+  display: grid;
+  width: 42px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--grad-accent);
+  color: var(--primary-2);
+}
+
+.composer svg {
+  width: 18px;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 480px) {
+  .widget {
+    inset-inline-start: 8px;
+    inset-block-end: 8px;
+  }
+
+  .launcher {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messages {
+    scroll-behavior: auto;
+  }
+
+  .launcher {
+    animation: none;
+  }
+}

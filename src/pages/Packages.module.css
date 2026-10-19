@@ -1,0 +1,33 @@
+.page { width:min(1180px,calc(100% - 2.5rem)); margin-inline:auto; padding-block:2.4rem 4rem; }
+.heading { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-block-end:24px; }
+.heading h2 { margin-block:6px; color:var(--ink); font-size:clamp(1.5rem,3vw,2.2rem); font-weight:900; }
+.heading p { color:var(--muted); }
+.eyebrow { color:var(--p); font-size:13px; font-weight:800; }
+.backLink,.packageLink { display:inline-flex; min-height:38px; align-items:center; justify-content:center; gap:7px; padding:7px 13px; border-radius:999px; background:var(--grad-primary); color:var(--on-primary); font-size:13px; font-weight:800; }
+.section { margin-block-start:2rem; }
+.sectionHeading { display:flex; align-items:end; justify-content:space-between; gap:15px; margin-block-end:14px; }
+.sectionHeading h3 { color:var(--ink); font-size:1.25rem; font-weight:900; }
+.courseGrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr)); gap:14px; }
+.courseCard { display:grid!important; align-content:start; gap:10px; padding:18px!important; border:1px solid var(--line)!important; border-radius:18px!important; background:var(--surface)!important; box-shadow:var(--shadow-card)!important; transition:transform 260ms var(--ease),box-shadow 260ms ease; }
+.courseCard:hover { transform:translateY(-4px); box-shadow:var(--shadow-hover)!important; }
+.chip { width:fit-content; padding:5px 11px; border-radius:999px; background:var(--p-soft); color:var(--p-dark); font-size:11px; font-weight:800; }
+.courseCard h3 { color:var(--ink); font-size:1rem; font-weight:800; }
+.courseCard p { color:var(--muted); font-size:13px; }
+.courseFooter { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-block-start:5px; padding-block-start:11px; border-block-start:1px dashed var(--line); }
+.courseFooter strong { color:var(--s-dark); }
+.gradeList { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.gradeCard { display:grid!important; align-content:start; gap:13px; padding:18px!important; border:1px solid var(--line)!important; border-radius:19px!important; background:var(--surface)!important; box-shadow:var(--shadow-card)!important; }
+.gradeCard>h3 { color:var(--ink); font-weight:900; }
+.systemGrid { display:grid; gap:9px; }
+.systemCard { display:grid; gap:9px; padding:12px; border:1px solid var(--line); border-radius:13px; background:var(--surface-soft); }
+.systemCard h4 { color:var(--p-dark); font-size:13px; }
+.termList { display:grid; gap:6px; }
+.termItem { display:flex; align-items:center; justify-content:space-between; gap:9px; padding-block:5px; border-block-end:1px solid var(--line); color:var(--muted); font-size:12px; }
+.termItem:last-child { border:0; }
+.packageLink { min-height:30px; padding:4px 9px; font-size:11px; }
+.packageLink svg { width:14px; height:14px; }
+.soon { color:var(--muted); font-size:11px; }
+.note { margin-block-start:18px; padding:13px 15px; border-inline-start:4px solid var(--s); border-radius:12px; background:var(--s-soft); color:var(--muted); font-size:13px; }
+.loading,.emptyState { display:grid; justify-items:center; gap:12px; padding:22px; border:1px solid var(--line); border-radius:17px; background:var(--surface); color:var(--muted); text-align:center; }
+@media(max-width:980px){.gradeList{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.page{width:calc(100% - 28px);padding-block:1.5rem 3rem}.heading,.sectionHeading{align-items:flex-start;flex-direction:column}.gradeList,.courseGrid{grid-template-columns:1fr}}

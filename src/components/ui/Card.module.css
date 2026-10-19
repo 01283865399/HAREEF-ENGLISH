@@ -1,0 +1,55 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 350ms var(--ease),
+    border-color 300ms ease,
+    box-shadow 350ms ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--p);
+  box-shadow: var(--shadow-hover);
+}
+
+.interactive:hover {
+  transform: translateY(-6px);
+  border-color: var(--p);
+  box-shadow: var(--shadow-hover);
+}
+
+.dark {
+  border-color: transparent;
+  background: var(--grad-primary);
+  border-color: transparent;
+  color: var(--on-primary);
+}
+
+@supports not (
+  (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
+) {
+  .card {
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .dark {
+    background: var(--grad-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover,
+  .interactive:hover {
+    transition: none;
+    transform: none;
+  }
+}

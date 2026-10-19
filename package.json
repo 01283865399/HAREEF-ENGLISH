@@ -1,0 +1,40 @@
+{
+  "name": "mr-mahmoud-english-platform",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:vercel": "node scripts/dev-vercel.mjs",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "lenis": "^1.3.26",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.5.3",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.31.0",
+    "vite": "^6.3.3",
+    "vitest": "^5.0.5"
+  }
+}

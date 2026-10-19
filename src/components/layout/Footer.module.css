@@ -1,0 +1,124 @@
+.footer {
+  position: relative;
+  padding-block: 3rem 1.25rem;
+  background: var(--brand-deep);
+  color: var(--on-primary);
+}
+
+.footer::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--s), var(--p));
+  content: "";
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1.8fr 1fr;
+  gap: 2rem;
+}
+
+.brandColumn {
+  min-width: 0;
+}
+
+.brandColumn p,
+.copyright {
+  color: var(--on-light-dark);
+}
+
+.brandColumn p {
+  max-width: 36ch;
+  margin-block-start: 10px;
+  font-size: 13px;
+}
+
+.column {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 9px;
+  font-size: 13px;
+}
+
+.column strong {
+  margin-block-end: 3px;
+  color: var(--on-primary);
+  font-family: var(--font-heading);
+  font-size: 15px;
+}
+
+.column a {
+  color: var(--on-light-dark);
+  transition: color 180ms ease, padding 180ms ease;
+}
+
+.column a:hover {
+  padding-inline-start: 4px;
+  color: var(--s);
+}
+
+.column p {
+  display: grid;
+  gap: 2px;
+  color: var(--on-light-dark);
+  line-height: 1.6;
+}
+
+.column p b {
+  color: var(--on-primary);
+  font-size: 12px;
+}
+
+.socials {
+  display: flex;
+  gap: 8px;
+  margin-block-start: 13px;
+}
+
+.socials a {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface-faint);
+  color: var(--on-primary);
+  transition: transform 240ms var(--ease), background 240ms ease, color 240ms ease;
+}
+
+.socials a:hover {
+  transform: translateY(-4px) rotate(-6deg);
+  background: var(--s);
+  color: var(--on-s);
+}
+
+.socials svg {
+  width: 17px;
+  height: 17px;
+}
+
+.copyright {
+  margin-block-start: 2rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--on-primary-border);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .columns {
+    gap: 1.4rem 1rem;
+  }
+
+  .brandColumn {
+    grid-column: span 2;
+  }
+}

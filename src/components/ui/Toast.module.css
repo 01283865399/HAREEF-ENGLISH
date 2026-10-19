@@ -1,0 +1,70 @@
+.toast {
+  position: fixed;
+  z-index: 1200;
+  inset-inline-end: max(20px, env(safe-area-inset-right));
+  inset-block-end: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  width: min(420px, calc(100vw - 40px));
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--p);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-hover);
+  animation: toastEnter 450ms var(--ease) both;
+}
+
+.success {
+  border-inline-start-color: var(--s-dark);
+}
+
+.error {
+  border-inline-start-color: var(--danger);
+}
+
+.info {
+  border-inline-start-color: var(--p);
+}
+
+.toast button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.toast button:hover {
+  background: var(--p-soft);
+}
+
+.toast button svg {
+  width: 18px;
+  height: 18px;
+}
+
+@keyframes toastEnter {
+  from {
+    opacity: 0;
+    transform: translateY(140%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+}

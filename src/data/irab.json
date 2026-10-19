@@ -1,0 +1,47 @@
+[
+  {
+    "text": "The diligent student studies English",
+    "words": [
+      {
+        "text": "The",
+        "role": "Article",
+        "reason": "This definite article comes before the noun phrase."
+      },
+      {
+        "text": "diligent",
+        "role": "Adjective",
+        "reason": "This adjective describes the noun student."
+      }
+    ]
+  },
+  {
+    "text": "Mona has finished her homework",
+    "words": [
+      {
+        "text": "Mona",
+        "role": "Subject",
+        "reason": "Mona performs the action in this sentence."
+      },
+      {
+        "text": "has finished",
+        "role": "Present perfect verb",
+        "reason": "Have plus the past participle describes a completed action with present relevance."
+      }
+    ]
+  },
+  {
+    "text": "The books were placed on the table",
+    "words": [
+      {
+        "text": "were placed",
+        "role": "Passive verb",
+        "reason": "The past form of be plus a past participle forms the passive voice."
+      },
+      {
+        "text": "on",
+        "role": "Preposition",
+        "reason": "On introduces the place where the books were placed."
+      }
+    ]
+  }
+]

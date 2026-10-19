@@ -1,0 +1,82 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/"
+    },
+    {
+      "source": "/download-app",
+      "destination": "/"
+    },
+    {
+      "source": "/download-windows",
+      "destination": "/"
+    },
+    {
+      "source": "/login",
+      "destination": "/"
+    },
+    {
+      "source": "/forgot-password",
+      "destination": "/"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/"
+    },
+    {
+      "source": "/auth/callback",
+      "destination": "/"
+    },
+    {
+      "source": "/register",
+      "destination": "/"
+    },
+    {
+      "source": "/courses",
+      "destination": "/"
+    },
+    {
+      "source": "/courses/:courseId",
+      "destination": "/"
+    },
+    {
+      "source": "/packages",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard/lesson/:lessonId",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard/quiz",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard/profile",
+      "destination": "/"
+    },
+    {
+      "source": "/dashboard/orders",
+      "destination": "/"
+    },
+    {
+      "source": "/admin",
+      "destination": "/"
+    },
+    {
+      "source": "/home",
+      "destination": "/"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "course-nahw",
+    "category": "Grammar",
+    "title": "English Grammar Foundations",
+    "level": "Beginner",
+    "lessons": "٦ دروس",
+    "duration": "٤ أسابيع",
+    "price": "مجاني",
+    "priceAmount": 0,
+    "isFree": true,
+    "image": "05-course-1.png"
+  },
+  {
+    "id": "course-sarf",
+    "category": "Vocabulary",
+    "title": "Verb Forms and Tenses",
+    "level": "Intermediate",
+    "lessons": "٤ دروس",
+    "duration": "٣ أسابيع",
+    "price": "١٧٩ ج.م",
+    "image": "06-course-2.png"
+  },
+  {
+    "id": "course-balagha",
+    "category": "Reading",
+    "title": "Reading for Meaning",
+    "level": "Advanced",
+    "lessons": "٤ دروس",
+    "duration": "٢ أسابيع",
+    "price": "١٦٩ ج.م",
+    "image": "07-course-3.png"
+  },
+  {
+    "id": "course-adab",
+    "category": "Literature",
+    "title": "Literature and Text Analysis",
+    "level": "Intermediate",
+    "lessons": "٤ دروس",
+    "duration": "٤ أسابيع",
+    "price": "١٨٩ ج.م",
+    "image": "08-course-4.png"
+  }
+]

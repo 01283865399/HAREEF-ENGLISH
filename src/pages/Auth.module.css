@@ -1,0 +1,36 @@
+.formWrap { display:grid; width:min(100%,470px); gap:15px; margin-inline:auto; padding:26px; border:1px solid var(--line); border-radius:22px; background:var(--surface); box-shadow:var(--shadow-card); }
+.formWrap h1 { margin:0; color:var(--ink); font-size:1.75rem; font-weight:900; }
+.intro { color:var(--muted); font-size:14px; }
+.segmented { display:flex; gap:4px; padding:4px; border:1px solid var(--line); border-radius:999px; background:var(--bg); }
+.segment,.segmentActive { display:flex; min-height:38px; flex:1; align-items:center; justify-content:center; border-radius:999px; color:var(--muted); font-size:13px; font-weight:800; }
+.segment:hover { background:var(--p-soft); color:var(--p-dark); }
+.segmentActive { background:var(--grad-primary); color:var(--on-primary); box-shadow:var(--shadow-brown); }
+.formWrap form { display:grid; gap:14px; }
+.formWrap form>label { display:grid; gap:6px; color:var(--ink); font-size:13px; font-weight:700; }
+.inputWithIcon,.passwordField { display:flex; min-height:46px; align-items:center; gap:9px; padding-inline:12px; border:1.5px solid var(--line); border-radius:12px; background:var(--input-bg); color:var(--muted); transition:border-color 180ms ease,box-shadow 180ms ease; }
+.inputWithIcon:focus-within,.passwordField:focus-within { border-color:var(--p); box-shadow:0 0 0 3px var(--primary-2-soft); }
+.inputWithIcon svg,.passwordField>svg { width:18px; height:18px; flex:0 0 auto; color:var(--p); }
+.inputWithIcon input,.passwordField input { width:100%; min-width:0; min-height:42px; border:0; outline:0; background:transparent; color:var(--ink); font:inherit; }
+.passwordField button { display:grid; width:34px; height:34px; flex:0 0 auto; place-items:center; border:0; border-radius:50%; background:transparent; color:var(--p); cursor:pointer; }
+.passwordField button:hover { background:var(--p-soft); }
+.passwordField button svg { width:18px; height:18px; }
+.options { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.check { display:inline-flex; align-items:center; gap:7px; color:var(--muted); font-size:13px; }
+.check input { accent-color:var(--p); }
+.forgotLink,.switcher a { color:var(--p); font-weight:800; }
+.error,.success { padding:10px 12px; border:1px solid var(--danger); border-radius:12px; color:var(--danger); font-size:13px; }
+.success { border-color:var(--s-dark); background:var(--s-soft); color:var(--s-dark); }
+.separator { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:12px; }
+.separator::before,.separator::after { height:1px; flex:1; background:var(--line); content:""; }
+.googleButton { display:flex; min-height:46px; align-items:center; justify-content:center; gap:10px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--ink); font-weight:700; cursor:pointer; }
+.googleButton:hover { border-color:var(--p); background:var(--p-soft); }
+.googleButton:disabled { opacity:.65; cursor:not-allowed; }
+.googleMark { width:20px; height:20px; }
+.switcher { color:var(--muted); font-size:13px; text-align:center; }
+.qrCard { display:flex; align-items:center; gap:12px; padding:13px; border:1px solid var(--line); border-radius:16px; background:var(--surface-soft); }
+.qrLink { flex:0 0 auto; }
+.qrCode { width:68px; height:68px; border:5px solid var(--surface); border-radius:10px; }
+.qrCopy { display:grid; gap:3px; min-width:0; }
+.qrCopy strong { color:var(--ink); font-size:13px; }
+.qrCopy span,.qrCopy small { color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
+@media(max-width:560px){.formWrap{gap:13px;padding:20px;border-radius:18px}.formWrap h1{font-size:1.5rem}.qrCard{align-items:flex-start}}

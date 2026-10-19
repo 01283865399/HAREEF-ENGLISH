@@ -1,0 +1,61 @@
+.page { min-height:100vh; background:var(--bg); color:var(--ink); }
+.header { position:sticky; z-index:20; inset-block-start:0; display:flex; min-height:64px; align-items:center; justify-content:space-between; gap:16px; padding:8px max(20px,calc((100% - 1180px)/2)); border-block-end:1px solid var(--line); background:color-mix(in srgb,var(--surface) 88%,transparent); backdrop-filter:blur(14px); }
+.brand,.footerBrand { display:flex; align-items:center; gap:9px; }
+.brand img,.footerBrand img { width:38px; height:38px; border-radius:11px; }
+.brand strong,.brand small { display:block; }
+.brand strong { color:var(--p); font-family:var(--font-head); }
+.brand small { color:var(--muted); font-size:11px; }
+.headerActions { display:flex; align-items:center; gap:8px; }
+.themeButton,.homeLink,.browseLink { display:inline-flex; min-height:38px; align-items:center; justify-content:center; gap:7px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--ink); font-size:13px; font-weight:700; }
+.themeButton { width:38px; padding:0; border-radius:50%; }
+.homeLink:hover,.browseLink:hover,.themeButton:hover { border-color:var(--p); background:var(--p-soft); }
+.themeButton svg,.homeLink svg,.browseLink svg { width:17px; height:17px; }
+.content { width:min(1180px,calc(100% - 40px)); margin-inline:auto; }
+.hero { display:grid; grid-template-columns:1fr .9fr; align-items:center; gap:3rem; padding-block:4.5rem; }
+.heroCopy { display:grid; justify-items:start; gap:15px; }
+.eyebrow { display:inline-flex; align-items:center; gap:7px; color:var(--p); font-size:13px; font-weight:800; }
+.eyebrow svg { width:16px; }
+.hero h1 { color:var(--ink); font-size:clamp(2rem,4vw,3.3rem); font-weight:900; line-height:1.25; }
+.hero h1 span { display:block; color:var(--p); }
+.intro,.sectionHeading p,.teacherNote p,.requirementNote { color:var(--muted); }
+.heroActions { display:grid; justify-items:start; gap:10px; }
+.downloadButton { display:inline-flex; min-height:58px; align-items:center; gap:12px; padding:10px 18px; border-radius:16px; background:var(--grad-primary); color:var(--on-primary); box-shadow:var(--shadow-brown); }
+.downloadButton>svg { width:22px; height:22px; }
+.downloadButton strong,.downloadButton small { display:block; }
+.downloadButton small { color:var(--on-primary-soft); font-size:11px; }
+.secureNote { display:inline-flex; align-items:center; gap:7px; color:var(--muted); font-size:12px; }
+.secureNote svg { width:16px; color:var(--s-dark); }
+.appShowcase { position:relative; display:grid; min-height:420px; place-items:center; }
+.appCard { display:grid; width:min(300px,100%); justify-items:center; gap:10px; padding:28px; border:1px solid var(--line); border-radius:24px; background:var(--surface); box-shadow:var(--shadow-hover); text-align:center; }
+.appBadge { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; background:var(--s-soft); color:var(--s-dark); font-size:11px; font-weight:800; }
+.appIcon { width:94px; height:94px; border-radius:24px; }
+.appCard h2 { color:var(--ink); font-weight:900; }
+.appCard p { color:var(--muted); font-size:13px; }
+.appDivider { width:100%; border-block-start:1px solid var(--line); }
+.appDetails { display:flex; width:100%; justify-content:space-between; color:var(--muted); font-size:11px; }
+.teacherCard { position:absolute; inset-inline-end:0; inset-block-end:25px; display:flex; align-items:center; gap:10px; padding:9px 13px; border:1px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:var(--shadow-card); }
+.teacherCard img { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+.teacherCard span,.teacherCard strong { display:block; font-size:11px; }
+.decorativeTile { position:absolute; inset-inline-start:3%; inset-block-start:18%; display:grid; width:54px; height:54px; place-items:center; border-radius:16px; background:var(--s); color:var(--on-s); transform:rotate(-8deg); }
+.features,.install { padding-block:3.5rem; border-block-start:1px solid var(--line); }
+.sectionHeading { max-width:650px; margin-block-end:1.5rem; }
+.sectionHeading h2,.teacherNote h2 { margin-block:6px; color:var(--ink); font-size:1.7rem; font-weight:900; }
+.featureGrid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.featureCard { display:grid; align-content:start; gap:9px; padding:17px; border:1px solid var(--line); border-radius:17px; background:var(--surface); box-shadow:var(--shadow-card); }
+.featureIcon { display:grid; width:42px; height:42px; place-items:center; border-radius:13px; background:var(--p-soft); color:var(--p); }
+.featureIcon svg { width:20px; }
+.featureCard h3 { color:var(--ink); font-size:15px; font-weight:800; }
+.featureCard p { color:var(--muted); font-size:12px; }
+.teacherNote { display:flex; align-items:center; gap:20px; padding:22px; border:1px solid var(--line); border-radius:22px; background:var(--surface); box-shadow:var(--shadow-card); }
+.teacherNote>img { width:100px; height:100px; flex:0 0 auto; border-radius:18px; object-fit:cover; }
+.teacherNote>div { flex:1; }
+.teacherNote .browseLink { flex:0 0 auto; }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:0; list-style:none; counter-reset:steps; }
+.steps li { display:flex; align-items:center; gap:12px; padding:16px; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.steps li>span { display:grid; width:38px; height:38px; flex:0 0 auto; place-items:center; border:2px solid var(--p); border-radius:50%; color:var(--p); font-weight:900; }
+.steps p { color:var(--ink); font-size:13px; }
+.requirementNote { margin-block-start:14px; font-size:12px; }
+.footer { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px max(20px,calc((100% - 1180px)/2)); border-block-start:4px solid var(--p); background:var(--brand-deep); color:var(--on-primary); }
+.footerBrand { font-weight:800; }
+@media(max-width:980px){.hero{grid-template-columns:1fr;gap:2rem}.appShowcase{grid-row:1;min-height:350px}.featureGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.header{min-height:58px;padding-inline:14px}.headerActions{gap:5px}.homeLink{font-size:0;padding-inline:9px}.content{width:calc(100% - 28px)}.hero{padding-block:2.5rem}.appShowcase{min-height:320px}.appCard{width:250px;padding:20px}.teacherCard{inset-inline-end:-4px}.featureGrid,.steps{grid-template-columns:1fr}.teacherNote{align-items:flex-start;flex-wrap:wrap;padding:16px}.teacherNote>img{width:66px;height:66px}.teacherNote .browseLink{margin-inline-start:76px}.footer{align-items:flex-start;flex-direction:column;padding-inline:14px}}

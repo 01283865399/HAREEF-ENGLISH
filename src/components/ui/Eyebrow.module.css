@@ -1,0 +1,18 @@
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-block-end: 7px;
+  padding: 4px 0;
+  color: var(--p);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.eyebrow::before {
+  width: 18px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--s-dark);
+  content: "";
+}

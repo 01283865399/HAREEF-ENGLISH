@@ -1,0 +1,40 @@
+.bar {
+  position: relative;
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 48px;
+  background: var(--brand-deep);
+  color: var(--on-primary);
+  font-size: 12px;
+  text-align: center;
+}
+
+.bar p {
+  margin: 0;
+}
+
+.bar a {
+  color: var(--s);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.close {
+  position: absolute;
+  inset-inline-end: max(var(--gutter), calc((100% - var(--container)) / 2));
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close svg {
+  width: 15px;
+}

@@ -1,0 +1,77 @@
+{
+  "levelTest": {
+    "id": "level-test",
+    "questions": [
+      {
+        "question": "Choose the correct form: She ___ to school every day.",
+        "options": ["go", "goes", "is go", "going"],
+        "answer": 1
+      },
+      {
+        "question": "We ___ in Cairo since 2020.",
+        "options": ["live", "lived", "have lived", "are living"],
+        "answer": 2
+      },
+      {
+        "question": "If I ___ more time, I would learn another language.",
+        "options": ["have", "had", "will have", "would have"],
+        "answer": 1
+      },
+      {
+        "question": "The email ___ yesterday.",
+        "options": ["sent", "was sent", "is sending", "has send"],
+        "answer": 1
+      },
+      {
+        "question": "Choose the closest meaning of accurate.",
+        "options": ["Correct", "Ancient", "Difficult", "Careless"],
+        "answer": 0
+      },
+      {
+        "question": "Which word is spelled correctly?",
+        "options": ["recieve", "receive", "receeve", "receve"],
+        "answer": 1
+      },
+      {
+        "question": "Read: Lina takes the bus every morning because it is faster than walking. Why does Lina take the bus?",
+        "options": ["It is faster", "She dislikes walking", "The bus is free", "She starts late"],
+        "answer": 0
+      },
+      {
+        "question": "My brother is interested ___ learning French.",
+        "options": ["at", "on", "in", "for"],
+        "answer": 2
+      },
+      {
+        "question": "Choose the correct sentence.",
+        "options": ["The news are surprising.", "The news is surprising.", "The news were surprise.", "The news be surprising."],
+        "answer": 1
+      },
+      {
+        "question": "___ being tired, Omar finished his homework.",
+        "options": ["Although", "Despite", "Because", "Unless"],
+        "answer": 1
+      }
+    ]
+  },
+  "lessonQuiz": {
+    "id": "lesson-1",
+    "questions": [
+      {
+        "question": "Choose the verb: The children played outside.",
+        "options": ["children", "played", "outside", "the"],
+        "answer": 1
+      },
+      {
+        "question": "Which sentence is in the present continuous?",
+        "options": ["She reads every day.", "She is reading now.", "She read yesterday.", "She has read the book."],
+        "answer": 1
+      },
+      {
+        "question": "Choose the correct word order.",
+        "options": ["Likes Sara music.", "Sara music likes.", "Sara likes music.", "Music Sara likes."],
+        "answer": 2
+      }
+    ]
+  }
+}

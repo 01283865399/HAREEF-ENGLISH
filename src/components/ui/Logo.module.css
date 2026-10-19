@@ -1,0 +1,59 @@
+.logo {
+  display: inline-flex;
+  gap: 10px;
+  flex: 0 0 auto;
+  align-items: center;
+  min-width: 0;
+}
+
+.icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  border-radius: 22%;
+}
+
+.wordmark {
+  display: grid;
+  justify-items: start;
+  gap: 1px;
+  line-height: 1;
+}
+
+.arabicName {
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.englishName {
+  color: var(--p);
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.compact .wordmark {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .responsive .icon {
+    display: block;
+    width: 38px;
+    height: 38px;
+  }
+
+  .responsive .arabicName {
+    font-size: 17px;
+  }
+
+  .responsive .englishName {
+    font-size: 8px;
+  }
+}
