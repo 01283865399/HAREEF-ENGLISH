@@ -11,6 +11,7 @@ interface GuideMessage {
   role: "guide" | "student";
   text: string;
   link?: { label: string; href: string };
+  suggestions?: string[];
 }
 
 interface Position {
@@ -21,14 +22,14 @@ interface Position {
 const positionKey = "mr-mahmoud:guide:position:v1";
 const messagesKey = "mr-mahmoud:guide:messages:v1";
 const welcome =
-  "أهلًا بيك! أنا مساعدك في English وفي استخدام المنصة. اسألني عن Grammar أو Vocabulary أو كورساتك.";
+  "أهلًا بيك! أنا مساعدك في English وفي استخدام المنصة. أساعدك في الكورسات والحساب، وأشرحلك القواعد. اختار سؤال أو اكتب اللي محتاجه.";
 const quickQuestions = [
   "كيف أشترك في كورس؟",
-  "إيه الكورسات المتاحة؟",
+  "مين مطور المنصة؟",
   "اشرحلي present simple",
 ];
 const developerAnswer =
-  "المهندس أحمد محمود منصور ديب هو مطوّر المنصة.";
+  "المهندس أحمد ديب هو مطوّر المنصة. طالب في كلية هندسة الذكاء الاصطناعي وعلوم الحاسوب، ومطوّر Full Stack بيبني منصات ومواقع تعليمية ومتاجر إلكترونية.";
 const developerLink = {
   label: "تعرّف على المطوّر",
   href: "/about-developer",
@@ -41,7 +42,8 @@ function isDeveloperQuestion(value: string): boolean {
     .replace(/[ة]/gu, "ه")
     .toLocaleLowerCase("ar");
   const developerTitle = /(مطور|مبرمج|صانع|منشئ|مصمم|صاحب)/u.test(normalized);
-  const platformCreation = /(عمل|انشا|انشئ)/u.test(normalized) &&
+  const platformCreation =
+    /(عمل|انشا|انشئ)/u.test(normalized) &&
     /(منصه|موقع|تطبيق|مستر محمود|من عمل|مين عمل)/u.test(normalized);
   return developerTitle || platformCreation;
 }
@@ -160,22 +162,44 @@ export function LocalGuideBot() {
     ]);
     answerTimer.current = window.setTimeout(async () => {
       answerTimer.current = undefined;
-      const { localFaqs } = await import("./data");
-      if (requestSequence.current !== requestId) return;
-      const answer = isDeveloperQuestion(text)
-        ? { answer: developerAnswer, link: developerLink }
-        : createAnswer(matchFaqDetailed(text, localFaqs).best?.faq ?? null);
-      if (requestSequence.current !== requestId) return;
-      setMessages((current) => [
-        ...current,
-        {
-          id: nextId.current++,
-          role: "guide",
-          text: answer.answer,
-          ...(answer.link ? { link: answer.link } : {}),
-        },
-      ]);
-      setIsTyping(false);
+      try {
+        const { localFaqs } = await import("./data");
+        if (requestSequence.current !== requestId) return;
+        const match = matchFaqDetailed(text, localFaqs);
+        const answer = isDeveloperQuestion(text)
+          ? {
+              answer: developerAnswer,
+              link: developerLink,
+              followUps: ["إزاي أتواصل مع المطوّر؟", "إزاي أستخدم المنصة؟"],
+            }
+          : createAnswer(match.best?.faq ?? null);
+        if (requestSequence.current !== requestId) return;
+        setMessages((current) => [
+          ...current,
+          {
+            id: nextId.current++,
+            role: "guide",
+            text: answer.answer,
+            ...(answer.link ? { link: answer.link } : {}),
+            suggestions: answer.followUps.slice(0, 3),
+          },
+        ]);
+      } catch (error) {
+        console.error("Unable to answer platform guide question.", error);
+        if (requestSequence.current === requestId) {
+          setMessages((current) => [
+            ...current,
+            {
+              id: nextId.current++,
+              role: "guide",
+              text: "حصلت مشكلة وأنا بجهّز الإجابة. جرّب السؤال تاني من فضلك.",
+              suggestions: quickQuestions,
+            },
+          ]);
+        }
+      } finally {
+        if (requestSequence.current === requestId) setIsTyping(false);
+      }
     }, 350);
   }
 
@@ -222,21 +246,35 @@ export function LocalGuideBot() {
     }
   }
 
+  const latestMessage = messages.at(-1);
+  const suggestions =
+    latestMessage?.role === "guide" && latestMessage.suggestions?.length
+      ? latestMessage.suggestions
+      : quickQuestions;
+
   return (
     <div className={styles.widget} dir="rtl">
       {open && (
-        <section className={styles.panel} role="dialog" aria-label="مرشد المنصة">
+        <section
+          className={styles.panel}
+          role="dialog"
+          aria-label="مرشد المنصة"
+        >
           <header className={styles.header}>
             <span className={styles.avatar}>
               <Icon name="book" />
             </span>
             <div>
               <h2>مرشد المنصة</h2>
-              <small>إرشاد محلي داخل الموقع</small>
+              <small className={styles.status}>
+                <i aria-hidden="true" />
+                مساعد فوري للموقع
+              </small>
             </div>
             <button
               aria-label="مسح محادثة مرشد المنصة"
               className={styles.close}
+              title="ابدأ محادثة جديدة"
               onClick={() => {
                 requestSequence.current += 1;
                 if (answerTimer.current !== undefined) {
@@ -276,15 +314,28 @@ export function LocalGuideBot() {
               >
                 <p>{message.text}</p>
                 {message.link && (
-                  <Link to={message.link.href}>{message.link.label}</Link>
+                  <Link to={message.link.href}>
+                    {message.link.label}
+                    <Icon name="arrow" />
+                  </Link>
                 )}
               </article>
             ))}
-            {isTyping && <div className={styles.typing}>...</div>}
+            {isTyping && (
+              <div
+                aria-label="مرشد المنصة بيكتب"
+                className={styles.typing}
+                role="status"
+              >
+                <span />
+                <span />
+                <span />
+              </div>
+            )}
             {!isTyping && (
               <div className={styles.suggestions}>
                 <span>جرّب أن تسأل</span>
-                {quickQuestions.map((suggestion) => (
+                {suggestions.map((suggestion) => (
                   <button
                     key={suggestion}
                     onClick={() => sendQuestion(suggestion)}
@@ -299,35 +350,43 @@ export function LocalGuideBot() {
           <form className={styles.composer} onSubmit={submit}>
             <input
               aria-label="اكتب سؤالك"
+              disabled={isTyping}
               onChange={(event) => setQuestion(event.target.value)}
-              placeholder="اسأل عن المنصة..."
+              placeholder="اكتب سؤالك هنا..."
               ref={inputRef}
               value={question}
             />
-            <button aria-label="إرسال السؤال" disabled={!question.trim()} type="submit">
+            <button
+              aria-label="إرسال السؤال"
+              disabled={!question.trim() || isTyping}
+              type="submit"
+            >
               <Icon name="send" />
             </button>
           </form>
         </section>
       )}
-      <button
-        aria-expanded={open}
-        aria-label={open ? "إغلاق مرشد المنصة" : "فتح مرشد المنصة"}
-        className={styles.launcher}
-        onClick={() => {
-          if (!moved.current) setOpen((current) => !current);
-          moved.current = false;
-        }}
-        onPointerDown={pointerDown}
-        onPointerMove={pointerMove}
-        onPointerUp={pointerUp}
-        type="button"
-      >
-        {open ? <Icon name="close" /> : <Icon name="book" />}
-        <span className={styles.launcherLabel}>
-          {open ? "إغلاق" : "مرشد المنصة"}
-        </span>
-      </button>
+      <div className={styles.launcherWrap}>
+        {!open && <span className={styles.launcherHint}>محتاج مساعدة؟</span>}
+        <button
+          aria-expanded={open}
+          aria-label={open ? "إغلاق مرشد المنصة" : "فتح مرشد المنصة"}
+          className={styles.launcher}
+          onClick={() => {
+            if (!moved.current) setOpen((current) => !current);
+            moved.current = false;
+          }}
+          onPointerDown={pointerDown}
+          onPointerMove={pointerMove}
+          onPointerUp={pointerUp}
+          type="button"
+        >
+          {open ? <Icon name="close" /> : <Icon name="book" />}
+          <span className={styles.launcherLabel}>
+            {open ? "إغلاق" : "مرشد المنصة"}
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

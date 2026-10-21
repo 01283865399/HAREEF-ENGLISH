@@ -4,6 +4,7 @@ import { Icon } from "../components/ui/Icon";
 import { Logo } from "../components/ui/Logo";
 import { Toast } from "../components/ui/Toast";
 import { CONTACT_PHONES, teacherInfo } from "../data/teacherInfo";
+import developerPhoto from "../assets/images/ahmed-deeb1.jpg";
 import { useTheme } from "../features/theme/useTheme";
 import { getCourses, isFreeCourse } from "../services/courseService";
 import {
@@ -66,8 +67,16 @@ const featureTiles = teacherInfo.groupFeatures.map((feature, index) => ({
 const teacherProfileGroups = [
   { icon: "cap" as const, title: "المؤهلات", items: teacherInfo.education },
   { icon: "clock" as const, title: "الخبرة", items: teacherInfo.experience },
-  { icon: "spark" as const, title: "الدورات والبرامج", items: teacherInfo.courses },
-  { icon: "star" as const, title: "إنجازات شخصية", items: teacherInfo.achievements },
+  {
+    icon: "spark" as const,
+    title: "الدورات والبرامج",
+    items: teacherInfo.courses,
+  },
+  {
+    icon: "star" as const,
+    title: "إنجازات شخصية",
+    items: teacherInfo.achievements,
+  },
 ];
 
 export function PlatformLandingPage() {
@@ -145,7 +154,9 @@ export function PlatformLandingPage() {
   }, []);
 
   useEffect(() => {
-    const sections = [...document.querySelectorAll<HTMLElement>("main section[id]")];
+    const sections = [
+      ...document.querySelectorAll<HTMLElement>("main section[id]"),
+    ];
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -162,9 +173,11 @@ export function PlatformLandingPage() {
         },
         { threshold: 0.12, rootMargin: "0px 0px -32px 0px" },
       );
-      document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((item) => {
-        revealObserver?.observe(item);
-      });
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]")
+        .forEach((item) => {
+          revealObserver?.observe(item);
+        });
       sectionObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -178,9 +191,11 @@ export function PlatformLandingPage() {
       sections.forEach((section) => sectionObserver?.observe(section));
       document.body.dataset.revealReady = "true";
     } else {
-      document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((item) => {
-        item.dataset.revealed = "true";
-      });
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]")
+        .forEach((item) => {
+          item.dataset.revealed = "true";
+        });
     }
     return () => {
       revealObserver?.disconnect();
@@ -207,7 +222,9 @@ export function PlatformLandingPage() {
 
   return (
     <div className={styles.page}>
-      <header className={`${styles.header}${hidden ? ` ${styles.headerHidden}` : ""}`}>
+      <header
+        className={`${styles.header}${hidden ? ` ${styles.headerHidden}` : ""}`}
+      >
         <div className={`container ${styles.headerInner}`}>
           <button
             aria-expanded={menuOpen}
@@ -224,7 +241,9 @@ export function PlatformLandingPage() {
           <nav aria-label="التنقل الرئيسي" className={styles.desktopNav}>
             {navLinks.map((item) => (
               <a
-                aria-current={activeSection === item.id ? "location" : undefined}
+                aria-current={
+                  activeSection === item.id ? "location" : undefined
+                }
                 className={activeSection === item.id ? styles.navActive : ""}
                 href={`#${item.id}`}
                 key={item.id}
@@ -235,7 +254,9 @@ export function PlatformLandingPage() {
           </nav>
           <div className={styles.headerActions}>
             <button
-              aria-label={theme === "dark" ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"}
+              aria-label={
+                theme === "dark" ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الداكن"
+              }
               className={styles.iconButton}
               onClick={(event) => toggleTheme(event.currentTarget)}
               type="button"
@@ -251,8 +272,12 @@ export function PlatformLandingPage() {
               <Icon name="bell" />
               <span className={styles.notificationDot} />
             </button>
-            <Link className={styles.ghostButton} to="/login">تسجيل الدخول</Link>
-            <Link className={styles.primaryButton} to="/register">حساب جديد</Link>
+            <Link className={styles.ghostButton} to="/login">
+              تسجيل الدخول
+            </Link>
+            <Link className={styles.primaryButton} to="/register">
+              حساب جديد
+            </Link>
           </div>
         </div>
         <span
@@ -278,20 +303,42 @@ export function PlatformLandingPage() {
             className={styles.iconButton}
             onClick={() => setMenuOpen(false)}
             type="button"
-          ><Icon name="close" /></button>
+          >
+            <Icon name="close" />
+          </button>
         </div>
         <nav>
           {navLinks.map((item) => (
-            <a href={`#${item.id}`} key={item.id} onClick={() => setMenuOpen(false)}>
+            <a
+              href={`#${item.id}`}
+              key={item.id}
+              onClick={() => setMenuOpen(false)}
+            >
               {item.label}
             </a>
           ))}
-          <Link to="/download-app" onClick={() => setMenuOpen(false)}>تطبيق Android</Link>
-          <Link to="/download-windows" onClick={() => setMenuOpen(false)}>تطبيق Windows</Link>
+          <Link to="/download-app" onClick={() => setMenuOpen(false)}>
+            تطبيق Android
+          </Link>
+          <Link to="/download-windows" onClick={() => setMenuOpen(false)}>
+            تطبيق Windows
+          </Link>
         </nav>
         <div className={styles.drawerActions}>
-          <Link className={styles.primaryButton} to="/register" onClick={() => setMenuOpen(false)}>حساب جديد</Link>
-          <Link className={styles.ghostButton} to="/login" onClick={() => setMenuOpen(false)}>تسجيل الدخول</Link>
+          <Link
+            className={styles.primaryButton}
+            to="/register"
+            onClick={() => setMenuOpen(false)}
+          >
+            حساب جديد
+          </Link>
+          <Link
+            className={styles.ghostButton}
+            to="/login"
+            onClick={() => setMenuOpen(false)}
+          >
+            تسجيل الدخول
+          </Link>
         </div>
       </aside>
 
@@ -299,26 +346,44 @@ export function PlatformLandingPage() {
         <section className={styles.hero}>
           <div className={`container ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              <span className={`${styles.eyebrow} ${styles.reveal}`} data-reveal>
+              <span
+                className={`${styles.eyebrow} ${styles.reveal}`}
+                data-reveal
+              >
                 <Icon name="spark" /> {teacherInfo.tagline}
               </span>
               <h1 className={styles.reveal} data-reveal>
                 <span>{teacherInfo.name}</span>
               </h1>
-              <p className={`${styles.teacherRole} ${styles.reveal}`} data-reveal>
+              <p
+                className={`${styles.teacherRole} ${styles.reveal}`}
+                data-reveal
+              >
                 مدرس أول لغة إنجليزية
               </p>
               <p className={`${styles.heroLead} ${styles.reveal}`} data-reveal>
                 {teacherInfo.teachingDescription}
               </p>
               <p className={`${styles.heroLead} ${styles.reveal}`} data-reveal>
-                معروف بـ <strong>{teacherInfo.nickname}</strong> · {teacherInfo.hashtag}
+                معروف بـ <strong>{teacherInfo.nickname}</strong> ·{" "}
+                {teacherInfo.hashtag}
               </p>
-              <div className={`${styles.heroChips} ${styles.reveal}`} data-reveal>
-                <span className={styles.chip}><Icon name="star" /> البكالوريا</span>
-                <span className={styles.chip}><Icon name="book" /> الثانوية الأزهرية</span>
-                <span className={styles.chip}><Icon name="cap" /> الثانوية العامة</span>
-                <span className={styles.chip}><Icon name="plus" /> وباقي المراحل</span>
+              <div
+                className={`${styles.heroChips} ${styles.reveal}`}
+                data-reveal
+              >
+                <span className={styles.chip}>
+                  <Icon name="star" /> البكالوريا
+                </span>
+                <span className={styles.chip}>
+                  <Icon name="book" /> الثانوية الأزهرية
+                </span>
+                <span className={styles.chip}>
+                  <Icon name="cap" /> الثانوية العامة
+                </span>
+                <span className={styles.chip}>
+                  <Icon name="plus" /> وباقي المراحل
+                </span>
               </div>
               <div className={styles.heroActions}>
                 <Link className={styles.primaryButtonLarge} to="/register">
@@ -339,20 +404,42 @@ export function PlatformLandingPage() {
 
         <section className={styles.section} id="tracks">
           <div className="container">
-            <header className={`${styles.sectionHeading} ${styles.reveal}`} data-reveal>
+            <header
+              className={`${styles.sectionHeading} ${styles.reveal}`}
+              data-reveal
+            >
               <span className={styles.kicker}>المراحل الدراسية</span>
               <h2>اختار مسارك، وإحنا نكمّل معاك</h2>
               <p>محتوى متخصص حسب مرحلتك ونظامك الدراسي.</p>
             </header>
             <div className={styles.trackGrid}>
               {learningTracks.map((track) => (
-                <article className={`${styles.trackCard} ${styles.reveal}`} data-reveal key={track.number}>
-                  <span aria-hidden="true" className={styles.trackNumber}>{track.number}</span>
-                  <span className={styles.trackIcon}><Icon name={track.icon} /></span>
+                <article
+                  className={`${styles.trackCard} ${styles.reveal}`}
+                  data-reveal
+                  key={track.number}
+                >
+                  <span aria-hidden="true" className={styles.trackNumber}>
+                    {track.number}
+                  </span>
+                  <span className={styles.trackIcon}>
+                    <Icon name={track.icon} />
+                  </span>
                   <h3>{track.title}</h3>
                   <p>{track.text}</p>
-                  <ul>{track.topics.map((topic) => <li key={topic}><Icon name="check" />{topic}</li>)}</ul>
-                  <a className={styles.trackLink} href="#courses" onClick={() => setStage(track.stage)}>
+                  <ul>
+                    {track.topics.map((topic) => (
+                      <li key={topic}>
+                        <Icon name="check" />
+                        {topic}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    className={styles.trackLink}
+                    href="#courses"
+                    onClick={() => setStage(track.stage)}
+                  >
                     شوف كورسات المسار <Icon name="arrow" />
                   </a>
                 </article>
@@ -363,16 +450,25 @@ export function PlatformLandingPage() {
 
         <section className={styles.section} id="why">
           <div className="container">
-            <header className={`${styles.sectionHeading} ${styles.centerHeading} ${styles.reveal}`} data-reveal>
+            <header
+              className={`${styles.sectionHeading} ${styles.centerHeading} ${styles.reveal}`}
+              data-reveal
+            >
               <span className={styles.kicker}>مميزات المجموعات</span>
               <h2>متابعة منظمة في كل خطوة</h2>
               <p>من التأسيس لحد امتحان نهاية كل وحدة، بخطوات واضحة ومستمرة.</p>
             </header>
             <div className={styles.bentoGrid}>
               {featureTiles.map((tile) => (
-                <article className={`${styles.bentoCell} ${styles.featureCard} ${styles[tile.variant]} ${styles.reveal}`} data-reveal key={tile.title}>
+                <article
+                  className={`${styles.bentoCell} ${styles.featureCard} ${styles[tile.variant]} ${styles.reveal}`}
+                  data-reveal
+                  key={tile.title}
+                >
                   <div className={styles.featureCardTop}>
-                    <span className={styles.bentoIcon}><Icon name={tile.icon} /></span>
+                    <span className={styles.bentoIcon}>
+                      <Icon name={tile.icon} />
+                    </span>
                     <span aria-hidden="true" className={styles.featureNumber}>
                       {tile.number}
                     </span>
@@ -426,11 +522,15 @@ export function PlatformLandingPage() {
                     key={group.title}
                   >
                     <div className={styles.profileCardHeading}>
-                      <span><Icon name={group.icon} /></span>
+                      <span>
+                        <Icon name={group.icon} />
+                      </span>
                       <h3>{group.title}</h3>
                     </div>
                     <ul>
-                      {group.items.map((item) => <li key={item}>{item}</li>)}
+                      {group.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
                     </ul>
                   </article>
                 ))}
@@ -441,13 +541,23 @@ export function PlatformLandingPage() {
 
         <section className={styles.section} id="courses">
           <div className="container">
-            <header className={`${styles.sectionHeading} ${styles.reveal}`} data-reveal>
+            <header
+              className={`${styles.sectionHeading} ${styles.reveal}`}
+              data-reveal
+            >
               <span className={styles.kicker}>الكورسات</span>
               <h2>ابدأ من الكورس المناسب ليك</h2>
               <p>فلتر حسب مرحلتك وشوف الكورسات المرتبطة بالنظام المسجل.</p>
             </header>
-            <div className={`${styles.catalogToolbar} ${styles.reveal}`} data-reveal>
-              <div className={styles.stageTabs} role="tablist" aria-label="فلترة حسب المرحلة">
+            <div
+              className={`${styles.catalogToolbar} ${styles.reveal}`}
+              data-reveal
+            >
+              <div
+                className={styles.stageTabs}
+                role="tablist"
+                aria-label="فلترة حسب المرحلة"
+              >
                 {stageTabs.map((tab) => (
                   <button
                     aria-selected={stage === tab.id}
@@ -456,7 +566,9 @@ export function PlatformLandingPage() {
                     onClick={() => setStage(tab.id)}
                     role="tab"
                     type="button"
-                  >{tab.label}</button>
+                  >
+                    {tab.label}
+                  </button>
                 ))}
               </div>
               <div className={styles.catalogControls}>
@@ -472,7 +584,12 @@ export function PlatformLandingPage() {
                 </label>
                 <label className={styles.priceFilter}>
                   <span>السعر</span>
-                  <select onChange={(event) => setPrice(event.target.value as PriceFilter)} value={price}>
+                  <select
+                    onChange={(event) =>
+                      setPrice(event.target.value as PriceFilter)
+                    }
+                    value={price}
+                  >
                     <option value="all">الكل</option>
                     <option value="free">مجاني</option>
                     <option value="paid">مدفوع</option>
@@ -481,37 +598,78 @@ export function PlatformLandingPage() {
               </div>
             </div>
             <p aria-live="polite" className={styles.resultsCount}>
-              {filteredCourses.length ? `عرض ${visibleCourses.length} من ${filteredCourses.length} كورس` : "مفيش كورسات في المرحلة دي حاليًا."}
+              {filteredCourses.length
+                ? `عرض ${visibleCourses.length} من ${filteredCourses.length} كورس`
+                : "مفيش كورسات في المرحلة دي حاليًا."}
             </p>
             {loadingCourses ? (
-              <div aria-label="جارٍ تحميل الكورسات" className={styles.courseGrid}>
-                {Array.from({ length: 3 }, (_, index) => <div className={styles.courseSkeleton} key={index} />)}
+              <div
+                aria-label="جارٍ تحميل الكورسات"
+                className={styles.courseGrid}
+              >
+                {Array.from({ length: 3 }, (_, index) => (
+                  <div className={styles.courseSkeleton} key={index} />
+                ))}
               </div>
             ) : coursesError ? (
               <div className={styles.stateMessage} role="alert">
-                <p>{coursesError}</p><button className={styles.ghostButton} onClick={retryCourses} type="button">جرّب تاني</button>
+                <p>{coursesError}</p>
+                <button
+                  className={styles.ghostButton}
+                  onClick={retryCourses}
+                  type="button"
+                >
+                  جرّب تاني
+                </button>
               </div>
             ) : visibleCourses.length ? (
               <div className={styles.courseGrid}>
                 {visibleCourses.map((course) => {
                   const free = isFreeCourse(course.id);
                   return (
-                    <article className={`${styles.courseCard} ${styles.reveal}`} data-reveal key={course.id}>
+                    <article
+                      className={`${styles.courseCard} ${styles.reveal}`}
+                      data-reveal
+                      key={course.id}
+                    >
                       <div className={styles.courseTop}>
-                        <span className={styles.courseTag}>{academicSystemLabel(course.academicSystem ?? categoryLabel(course.category))}</span>
+                        <span className={styles.courseTag}>
+                          {academicSystemLabel(
+                            course.academicSystem ??
+                              categoryLabel(course.category),
+                          )}
+                        </span>
                         <h3>{course.title}</h3>
-                        <span className={styles.courseIcon}><Icon name="book" /></span>
+                        <span className={styles.courseIcon}>
+                          <Icon name="book" />
+                        </span>
                       </div>
                       <div className={styles.courseBody}>
                         <div className={styles.courseMeta}>
-                          <span><Icon name="cap" />{levelLabel(course.level)}</span>
-                          <span><Icon name="clock" />{course.duration}</span>
-                          <span><Icon name="file" />{course.lessons}</span>
+                          <span>
+                            <Icon name="cap" />
+                            {levelLabel(course.level)}
+                          </span>
+                          <span>
+                            <Icon name="clock" />
+                            {course.duration}
+                          </span>
+                          <span>
+                            <Icon name="file" />
+                            {course.lessons}
+                          </span>
                         </div>
-                        <p className={styles.courseCategory}>{categoryLabel(course.category)}</p>
+                        <p className={styles.courseCategory}>
+                          {categoryLabel(course.category)}
+                        </p>
                         <div className={styles.courseFoot}>
-                          <div className={styles.price}><strong>{free ? "مجاني" : course.price}</strong></div>
-                          <Link className={styles.enrollButton} to={`/courses/${course.id}`}>
+                          <div className={styles.price}>
+                            <strong>{free ? "مجاني" : course.price}</strong>
+                          </div>
+                          <Link
+                            className={styles.enrollButton}
+                            to={`/courses/${course.id}`}
+                          >
                             اشترك <Icon name="arrow" />
                           </Link>
                         </div>
@@ -525,9 +683,16 @@ export function PlatformLandingPage() {
                 لا توجد كورسات مطابقة. غيّر المرحلة أو كلمة البحث.
               </div>
             )}
-            {coursesError ? null : filteredCourses.length > visibleCourses.length ? (
+            {coursesError ? null : filteredCourses.length >
+              visibleCourses.length ? (
               <div className={styles.moreCourses}>
-                <button className={styles.ghostButton} onClick={() => setVisibleCount((count) => count + 6)} type="button">شوف كورسات أكتر</button>
+                <button
+                  className={styles.ghostButton}
+                  onClick={() => setVisibleCount((count) => count + 6)}
+                  type="button"
+                >
+                  شوف كورسات أكتر
+                </button>
               </div>
             ) : null}
           </div>
@@ -540,7 +705,33 @@ export function PlatformLandingPage() {
               <h2>جاهز تبدأ رحلتك في الإنجليزي؟</h2>
               <p>أنشئ حسابك دلوقتي واختار المرحلة اللي تناسبك.</p>
             </div>
-            <Link className={styles.sageButton} to="/register"><Icon name="user" /> أنشئ حسابك</Link>
+            <Link className={styles.sageButton} to="/register">
+              <Icon name="user" /> أنشئ حسابك
+            </Link>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="developer-title"
+          className={styles.developerSection}
+        >
+          <div className={`container ${styles.developerCard}`}>
+            <img
+              alt="المهندس أحمد ديب"
+              className={styles.developerPhoto}
+              src={developerPhoto}
+            />
+            <div className={styles.developerCopy}>
+              <span className={styles.kicker}>تنفيذ وتطوير المنصة</span>
+              <h2 id="developer-title">المهندس أحمد ديب</h2>
+              <p>
+                طالب في كلية هندسة الذكاء الاصطناعي وعلوم الحاسوب، ومطوّر Full
+                Stack بيبني منصات ومواقع تعليمية ومتاجر إلكترونية.
+              </p>
+              <Link className={styles.developerLink} to="/about-developer">
+                اعرف أكتر عن المطوّر <Icon name="arrow" />
+              </Link>
+            </div>
           </div>
         </section>
       </main>
@@ -550,21 +741,38 @@ export function PlatformLandingPage() {
           <div className={styles.footerAbout}>
             <Logo dark />
             <p>{teacherInfo.teachingDescription}</p>
-            <div className={styles.socials} aria-label="حسابات التواصل الاجتماعي">
-              {(["youtube", "facebook", "telegram", "whatsapp"] as const).map((name) => (
-                <Link aria-label={name} key={name} to="/about-developer"><Icon name={name} /></Link>
-              ))}
+            <div
+              className={styles.socials}
+              aria-label="حسابات التواصل الاجتماعي"
+            >
+              {(["youtube", "facebook", "telegram", "whatsapp"] as const).map(
+                (name) => (
+                  <Link aria-label={name} key={name} to="/about-developer">
+                    <Icon name={name} />
+                  </Link>
+                ),
+              )}
             </div>
           </div>
           <div className={styles.footerColumn}>
             <h3>المراحل</h3>
-            {learningTracks.map((track) => <a href="#courses" key={track.stage} onClick={() => setStage(track.stage)}>{track.title}</a>)}
+            {learningTracks.map((track) => (
+              <a
+                href="#courses"
+                key={track.stage}
+                onClick={() => setStage(track.stage)}
+              >
+                {track.title}
+              </a>
+            ))}
           </div>
           <div className={styles.footerColumn}>
             <h3>أماكن المجموعات الأوفلاين للمرحلة الثانوية</h3>
             {teacherInfo.locations.map((location) => (
               <p key={location.name}>
-                <strong>{location.name} — {location.area}</strong>
+                <strong>
+                  {location.name} — {location.area}
+                </strong>
                 <span>{location.details}</span>
               </p>
             ))}
@@ -572,7 +780,11 @@ export function PlatformLandingPage() {
           <div className={styles.footerColumn}>
             <h3>للحجز والاستفسار</h3>
             {CONTACT_PHONES.length ? (
-              CONTACT_PHONES.map((phone) => <a href={`tel:${phone}`} key={phone}>{phone}</a>)
+              CONTACT_PHONES.map((phone) => (
+                <a href={`tel:${phone}`} key={phone}>
+                  {phone}
+                </a>
+              ))
             ) : (
               <p>أرقام التواصل هتظهر بعد تأكيد الرقم المعتمد.</p>
             )}
@@ -584,7 +796,11 @@ export function PlatformLandingPage() {
           © 2026 مستر محمود عبد الواحد. كل الحقوق محفوظة.
         </div>
       </footer>
-      <Toast message={toastMessage} onDismiss={() => setToastMessage("")} open={Boolean(toastMessage)} />
+      <Toast
+        message={toastMessage}
+        onDismiss={() => setToastMessage("")}
+        open={Boolean(toastMessage)}
+      />
     </div>
   );
 }

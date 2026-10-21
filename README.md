@@ -48,9 +48,9 @@ supabase/
    VITE_ADMIN_EMAIL=admin@example.com
    ```
 
-2. في مشروع Supabase جديد، شغّل بالترتيب `supabase/schema.sql` ثم `supabase/add-academic-course-packages.sql` ثم `supabase/website-update.sql` من SQL Editor. للمشروع الموجود الذي يحتوي المخطط الأساسي، خذ نسخة احتياطية ولا تعِد تشغيل `schema.sql`؛ شغّل ملفي الحزم والتحديث فقط. التحديث يضيف جداول محادثات AI بسياسات ملكية، ويحدّث محتوى الكورسات والدروس للإنجليزية، ويطبق حماية الوصول للكورسات المدفوعة وطرق الدفع الحالية. استعلاما التحقق في نهاية التحديث يجب أن يرجعا صفرًا للمحتوى العربي في أسماء ووصف الكورسات والدروس.
-3. اضبط `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` في `.env.local` محليًا وإعدادات Vercel. اضبط `GEMINI_API_KEY` كمتغير خادمي في Vercel لتشغيل الذكاء الاصطناعي، ولا تستخدم بادئة `VITE_` للمفتاح.
-4. أنشئ حساب المدير وأكّد بريده، ثم شغّل `supabase/promote-admin.sql` يدويًا في SQL Editor لمنحه صلاحية الإدارة. اسم الدخول `admin` يشير إلى البريد المحدد في `VITE_ADMIN_EMAIL`.
+2. أنشئ حساب المدير وأكّد بريده، ثم شغّل `supabase/promote-admin.sql` يدويًا في SQL Editor لمنحه صلاحية الإدارة. اسم الدخول `admin` يشير إلى البريد المحدد في `VITE_ADMIN_EMAIL`.
+3. شغّل `supabase/schema.sql` يدويًا في SQL Editor الخاص بالمشروع.
+4. عند إعداد محتوى الكورسات، راجع ملفات SQL الموجودة في مجلد `supabase/` واتبع التسلسل الموثق في `supabase/README.md`.
 
 تسجيل Google واستعادة كلمة المرور يستخدمان Supabase Auth. فعّل Google Provider وأضف روابط الموقع المحلي والإنتاجي إلى قائمة Redirect URLs في إعدادات Authentication.
 
@@ -60,3 +60,4 @@ supabase/
 
 - بيانات التقدم المحلية لا تتزامن بين الأجهزة.
 - بوابات التحقق الأساسية: `npm run build` و`npm test` و`npm run lint`.
+- الـBackend المستقل مبني بـNext.js في `apps/backend/`. راجع `apps/backend/README.md` لإعداده ونشره على Vercel وربط واجهة الموقع به عن طريق `VITE_API_BASE`.

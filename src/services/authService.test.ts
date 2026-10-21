@@ -35,6 +35,10 @@ describe("authService", () => {
       configurable: true,
       value: undefined,
     });
+    Object.defineProperty(window, "HareefDesktop", {
+      configurable: true,
+      value: undefined,
+    });
   });
 
   it("signs in with Supabase and maps the authenticated user", async () => {
@@ -145,9 +149,7 @@ describe("authService", () => {
   });
 
   it("uses the Android deep link for password recovery when running in the app", async () => {
-    const authRedirectUrl = vi.fn(
-      (route: string) => `alarrab://auth${route}`,
-    );
+    const authRedirectUrl = vi.fn((route: string) => `alarrab://auth${route}`);
     Object.defineProperty(window, "AlarrabAndroid", {
       configurable: true,
       value: { authRedirectUrl },
@@ -194,14 +196,52 @@ describe("authService", () => {
 
     await loginWithGoogle(true, "/courses");
 
-    expect(authRedirectUrl).toHaveBeenCalledWith(
-      "/auth/callback",
-      "/courses",
-    );
+    expect(authRedirectUrl).toHaveBeenCalledWith("/auth/callback", "/courses");
     expect(auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "google",
       options: { redirectTo: "alarrab://auth/auth/callback?next=/courses" },
     });
+  });
+
+  it("uses the Windows app link for Google OAuth when running in the desktop app", async () => {
+    const authRedirectUrl = vi.fn(
+      (_route: string, next: string) =>
+        `hareefenglish://auth/callback?next=${next}`,
+    );
+    Object.defineProperty(window, "HareefDesktop", {
+      configurable: true,
+      value: { authRedirectUrl },
+    });
+    auth.signInWithOAuth.mockResolvedValue({ error: null });
+
+    await loginWithGoogle(true, "/courses");
+
+    expect(authRedirectUrl).toHaveBeenCalledWith("/auth/callback", "/courses");
+    expect(auth.signInWithOAuth).toHaveBeenCalledWith({
+      provider: "google",
+      options: {
+        redirectTo: "hareefenglish://auth/callback?next=/courses",
+      },
+    });
+  });
+
+  it("uses the Windows app link for password recovery", async () => {
+    const authRedirectUrl = vi.fn((route: string) => {
+      expect(route).toBe("/reset-password");
+      return "hareefenglish://auth/reset-password";
+    });
+    Object.defineProperty(window, "HareefDesktop", {
+      configurable: true,
+      value: { authRedirectUrl },
+    });
+    auth.resetPasswordForEmail.mockResolvedValue({ error: null });
+
+    await requestPasswordReset("student@example.com");
+
+    expect(auth.resetPasswordForEmail).toHaveBeenCalledWith(
+      "student@example.com",
+      { redirectTo: "hareefenglish://auth/reset-password" },
+    );
   });
 
   it("rejects weak recovery passwords before contacting Supabase", async () => {

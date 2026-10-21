@@ -3,3 +3,11 @@
 .vercel
 node_modules
 dist
+.next
+apps/backend/tsconfig.tsbuildinfo
+apps/android/.gradle
+apps/android/local.properties
+apps/android/**/build
+apps/android/*.jks
+apps/android/*.keystore
+apps/windows/artifacts

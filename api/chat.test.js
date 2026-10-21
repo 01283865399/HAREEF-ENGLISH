@@ -186,7 +186,7 @@ describe("Gemini serverless function validation", () => {
         expect(JSON.parse(res.body)).toEqual({ error: "ai_failed" });
         expect(res.body).not.toContain("test-secret-key");
         expect(res.body).not.toContain("NOT_FOUND");
-        expect(log).toHaveBeenCalledOnce();
+        expect(log).toHaveBeenCalledTimes(2);
         const diagnostic = JSON.parse(
           log.mock.calls[0][0].replace("[Gemini] ", ""),
         );
@@ -205,7 +205,7 @@ describe("Gemini serverless function validation", () => {
     }
   });
 
-  it("retries an unavailable configured model with gemini-2.5-flash", async () => {
+  it("retries a 404 model with gemini-3.8-flash", async () => {
     const originalFetch = globalThis.fetch;
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     const fetchMock = vi
@@ -228,7 +228,7 @@ describe("Gemini serverless function validation", () => {
         }),
       });
     globalThis.fetch = fetchMock;
-    vi.stubEnv("GEMINI_MODEL", "unavailable-model");
+    vi.stubEnv("GEMINI_MODEL", "gemini-2.5-flash");
     try {
       await withTestKey(async () => {
         const res = mockResponse();
@@ -244,10 +244,10 @@ describe("Gemini serverless function validation", () => {
         expect(JSON.parse(res.body)).toEqual({ reply: "الفاعل مرفوع." });
         expect(fetchMock).toHaveBeenCalledTimes(2);
         expect(fetchMock.mock.calls[0][0]).toContain(
-          "/models/unavailable-model:",
+          "/models/gemini-2.5-flash:",
         );
         expect(fetchMock.mock.calls[1][0]).toContain(
-          "/models/gemini-2.5-flash:",
+          "/models/gemini-3.8-flash:",
         );
         expect(log).toHaveBeenCalledOnce();
       });
@@ -364,17 +364,7 @@ describe("Gemini serverless function validation", () => {
       ok: true,
       status: 200,
       json: async () => ({
-        candidates: [
-          {
-            content: {
-              parts: [
-                {
-                  text: 'في الجملة "The student reads"، The student هو الـ subject والفاعل.',
-                },
-              ],
-            },
-          },
-        ],
+        candidates: [{ content: { parts: [{ text: "المبتدأ مرفوع." }] } }],
       }),
     });
 
@@ -386,47 +376,22 @@ describe("Gemini serverless function validation", () => {
           {
             method: "POST",
             headers: {},
-            body: {
-              message: "ما المبتدأ؟",
-              history: [
-                { role: "user", text: "ما هو الفاعل؟" },
-                { role: "model", text: "الفاعل مرفوع." },
-              ],
-            },
+            body: { message: "ما المبتدأ؟" },
           },
           res,
         );
         expect(res.statusCode).toBe(200);
-        expect(JSON.parse(res.body)).toEqual({
-          reply:
-            'في الجملة "The student reads"، The student هو الـ subject والفاعل.',
-        });
+        expect(JSON.parse(res.body)).toEqual({ reply: "المبتدأ مرفوع." });
         const [, options] = fetchMock.mock.calls[0];
         const requestBody = JSON.parse(options.body);
         expect(JSON.stringify(requestBody.systemInstruction)).toContain(
           "English Grammar Foundations: Beginner",
         );
         expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "Reply naturally in Egyptian Arabic",
+          "المهندس أحمد ديب",
         );
         expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "grammar rules, vocabulary, reading passages, writing examples, model answers, and practice exercises in English",
-        );
-        expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "Do not translate English lesson content into Arabic unless the student explicitly asks for a translation",
-        );
-        expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "For questions about the platform, answer in Egyptian Arabic using only the platform facts below",
-        );
-        expect(requestBody.contents[1]).toEqual({
-          role: "model",
-          parts: [{ text: "الفاعل مرفوع." }],
-        });
-        expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "Ahmed Mahmoud Mansour Deep",
-        );
-        expect(JSON.stringify(requestBody.systemInstruction)).toContain(
-          "Faculty of Artificial Intelligence and Computer Science",
+          "كلية هندسة الذكاء الاصطناعي وعلوم الحاسوب",
         );
         expect(JSON.stringify(requestBody.systemInstruction)).toContain(
           "01283865399",

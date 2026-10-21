@@ -13,7 +13,7 @@ interface AIResponseBody {
 function getChatEndpoint(): string {
   const configuredBase = import.meta.env.VITE_API_BASE?.trim();
   if (configuredBase) {
-    return new URL("/api/chat", configuredBase).toString();
+    return new URL("/api/v1/ai/chat", configuredBase).toString();
   }
   if (window.location.origin.includes("appassets.androidplatform.net")) {
     return "https://el-arrab-edu-eji8.vercel.app/api/chat";
@@ -26,7 +26,7 @@ export async function askAI(
   history: AIHistoryMessage[] = [],
 ): Promise<AIResult> {
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 15_000);
+  const timeout = window.setTimeout(() => controller.abort(), 30_000);
   try {
     const response = await fetch(getChatEndpoint(), {
       method: "POST",

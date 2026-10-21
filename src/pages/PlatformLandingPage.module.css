@@ -13,7 +13,9 @@
   background: color-mix(in srgb, var(--surface) 86%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   backdrop-filter: blur(14px) saturate(1.4);
-  transition: transform 350ms var(--ease), background 350ms ease;
+  transition:
+    transform 350ms var(--ease),
+    background 350ms ease;
 }
 
 .headerHidden {
@@ -48,7 +50,10 @@
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .desktopNav a:hover,
@@ -81,7 +86,10 @@
   background: var(--surface);
   color: var(--ink);
   cursor: pointer;
-  transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease;
 }
 
 .iconButton:hover {
@@ -120,7 +128,10 @@
   font-weight: 700;
   text-align: center;
   white-space: nowrap;
-  transition: transform 220ms var(--ease), box-shadow 220ms ease, background 220ms ease;
+  transition:
+    transform 220ms var(--ease),
+    box-shadow 220ms ease,
+    background 220ms ease;
 }
 
 .ghostButton {
@@ -178,7 +189,9 @@
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
   opacity: 0;
-  transition: opacity 260ms ease, visibility 260ms ease;
+  transition:
+    opacity 260ms ease,
+    visibility 260ms ease;
 }
 
 .drawerScrimOpen {
@@ -223,7 +236,9 @@
   border-radius: 12px;
   color: var(--ink);
   font-weight: 600;
-  transition: background 180ms ease, padding 180ms ease;
+  transition:
+    background 180ms ease,
+    padding 180ms ease;
 }
 
 .drawer nav a:hover {
@@ -350,7 +365,10 @@
   color: var(--ink);
   font-size: 13px;
   font-weight: 700;
-  transition: transform 220ms var(--ease), border-color 220ms ease, background 220ms ease;
+  transition:
+    transform 220ms var(--ease),
+    border-color 220ms ease,
+    background 220ms ease;
 }
 
 .chip svg {
@@ -710,7 +728,10 @@
   border-radius: 24px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
-  transition: transform 350ms var(--ease), box-shadow 350ms ease, border-color 350ms ease;
+  transition:
+    transform 350ms var(--ease),
+    box-shadow 350ms ease,
+    border-color 350ms ease;
 }
 
 .trackCard:hover {
@@ -939,7 +960,10 @@
   font-family: var(--font-head);
   font-size: 1.15rem;
   font-weight: 900;
-  transition: transform 250ms var(--ease), background 250ms ease, color 250ms ease;
+  transition:
+    transform 250ms var(--ease),
+    background 250ms ease,
+    color 250ms ease;
 }
 
 .step:hover .stepNumber {
@@ -994,7 +1018,10 @@
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
-  transition: background 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  transition:
+    background 200ms ease,
+    color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .tab:hover {
@@ -1238,7 +1265,12 @@
   min-height: 275px;
   border: 1px solid var(--line);
   border-radius: 22px;
-  background: linear-gradient(100deg, var(--surface-soft) 20%, var(--p-soft) 40%, var(--surface-soft) 60%);
+  background: linear-gradient(
+    100deg,
+    var(--surface-soft) 20%,
+    var(--p-soft) 40%,
+    var(--surface-soft) 60%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
@@ -1248,7 +1280,9 @@
 }
 
 @keyframes shimmer {
-  to { background-position-x: -200%; }
+  to {
+    background-position-x: -200%;
+  }
 }
 
 .stateMessage {
@@ -1282,7 +1316,9 @@
   border-radius: 17px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
-  transition: border-color 220ms ease, box-shadow 220ms ease;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .faqOpen {
@@ -1394,6 +1430,57 @@
   box-shadow: var(--shadow-hover);
 }
 
+.developerSection {
+  padding-block: 0 3rem;
+}
+
+.developerCard {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.developerPhoto {
+  width: clamp(120px, 19vw, 190px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  border: 5px solid var(--p-soft);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.developerCopy h2 {
+  margin-block: 0.45rem;
+  color: var(--ink);
+  font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+  font-weight: 900;
+}
+
+.developerCopy p {
+  max-width: 62ch;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.developerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 0.8rem;
+  color: var(--p-dark);
+  font-weight: 800;
+}
+
+.developerLink svg {
+  width: 16px;
+  height: 16px;
+}
+
 .footer {
   position: relative;
   padding-block: 3rem 1.25rem;
@@ -1438,7 +1525,9 @@
 
 .footerColumn a {
   color: var(--on-light-dark);
-  transition: color 180ms ease, padding 180ms ease;
+  transition:
+    color 180ms ease,
+    padding 180ms ease;
 }
 
 .footerColumn a:hover {
@@ -1472,7 +1561,10 @@
   border-radius: 12px;
   background: var(--surface-faint);
   color: var(--on-primary);
-  transition: transform 240ms var(--ease), background 240ms ease, color 240ms ease;
+  transition:
+    transform 240ms var(--ease),
+    background 240ms ease,
+    color 240ms ease;
 }
 
 .socials a:hover {
@@ -1497,10 +1589,14 @@
 
 .reveal {
   opacity: 0;
-  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+  transition:
+    opacity 700ms var(--ease),
+    transform 700ms var(--ease);
 }
 
-.page :global(body[data-reveal-ready="true"]) [data-reveal]:not([data-revealed="true"]) {
+.page
+  :global(body[data-reveal-ready="true"])
+  [data-reveal]:not([data-revealed="true"]) {
   opacity: 0;
   transform: translateY(26px);
 }
@@ -1692,6 +1788,15 @@
     align-items: flex-start;
     flex-direction: column;
     border-radius: 22px;
+  }
+
+  .developerCard {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .developerPhoto {
+    width: 116px;
   }
 
   .footerGrid {

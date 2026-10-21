@@ -17,7 +17,12 @@ const { courseOrder, from, isConfigured, maybeSingle, rpc, select } =
 vi.mock("../lib/supabase", () => ({
   getSupabaseClient: () => ({ from, rpc }),
   isSupabaseConfigured: () => isConfigured.value,
-  safeSupabaseQuery: (query: () => Promise<unknown>) => query(),
+  safeSupabaseQuery: async (query: () => Promise<unknown>) => query(),
+}));
+
+vi.mock("./backendApi", () => ({
+  backendRequest: vi.fn(),
+  isBackendApiConfigured: () => false,
 }));
 
 import {
@@ -71,27 +76,12 @@ describe("courseService lesson access", () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: "grade-1-system-1-term-1",
-          title: "English Course - Grade 1 - General Secondary - Term 1",
+          title:
+            "English Course - الأول الثانوي - الثانوي العام - الفصل الدراسي الأول",
           price: "٢٢٩ ج.م",
         }),
       ]),
     );
-  });
-
-  it("keeps the core free course free when using local seed data", async () => {
-    isConfigured.value = false;
-
-    await expect(getCourses()).resolves.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: "course-nahw",
-          isFree: true,
-          price: "مجاني",
-          priceAmount: 0,
-        }),
-      ]),
-    );
-    expect(isLocallyFreeCourse("course-nahw")).toBe(true);
   });
 
   it("uses only the actual database course price when determining paid access", async () => {

@@ -28,13 +28,6 @@ export interface CoursePackageTemplate {
   priceAmount: number;
 }
 
-const englishSystems = [
-  "General Secondary",
-  "Al-Azhar Secondary",
-  "Baccalaureate",
-];
-const englishTerms = ["Term 1", "Term 2"];
-
 export const coursePackageTemplates: CoursePackageTemplate[] =
   academicGrades.flatMap((grade, gradeIndex) =>
     academicSystems.flatMap((system, systemIndex) =>
@@ -43,7 +36,7 @@ export const coursePackageTemplates: CoursePackageTemplate[] =
         grade,
         system,
         term,
-        title: `English Course - Grade ${gradeIndex + 1} - ${englishSystems[systemIndex]} - ${englishTerms[termIndex]}`,
+        title: `English Course - ${grade} - ${system} - ${term}`,
         priceAmount: 229 + gradeIndex * 30 + systemIndex * 10 + termIndex * 5,
       })),
     ),

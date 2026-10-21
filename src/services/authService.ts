@@ -11,6 +11,12 @@ declare global {
       ): string;
       setDarkMode(isDark: boolean): void;
     };
+    HareefDesktop?: {
+      authRedirectUrl(
+        route: "/auth/callback" | "/reset-password",
+        nextPath: string,
+      ): string;
+    };
   }
 }
 
@@ -20,6 +26,9 @@ function getAuthRedirectUrl(
 ): string {
   if (window.AlarrabAndroid) {
     return window.AlarrabAndroid.authRedirectUrl(route, nextPath);
+  }
+  if (window.HareefDesktop) {
+    return window.HareefDesktop.authRedirectUrl(route, nextPath);
   }
   const redirectTo = new URL(route, window.location.origin);
   if (route === "/auth/callback") {

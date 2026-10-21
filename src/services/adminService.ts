@@ -1,4 +1,9 @@
-import { getSupabaseClient, isSupabaseConfigured, type Database } from "../lib/supabase";
+import {
+  getSupabaseClient,
+  isSupabaseConfigured,
+  type Database,
+} from "../lib/supabase";
+import { backendRequest, isBackendApiConfigured } from "./backendApi";
 
 export type ManagedCourse = Database["public"]["Tables"]["courses"]["Row"];
 export type ManagedLesson = Database["public"]["Tables"]["lessons"]["Row"];
@@ -6,7 +11,8 @@ export type StudentProfileRow = Pick<
   Database["public"]["Tables"]["profiles"]["Row"],
   "id" | "full_name" | "email" | "phone" | "role" | "created_at"
 >;
-export type AdminActivity = Database["public"]["Tables"]["admin_activity_log"]["Row"];
+export type AdminActivity =
+  Database["public"]["Tables"]["admin_activity_log"]["Row"];
 
 export interface AdminStudent extends StudentProfileRow {
   enrolledCourses: { id: string; title: string; status: string }[];
@@ -24,7 +30,11 @@ export interface AdminOverview {
   approvedSubscriptions: number;
   totalRevenue: number;
   activeStudents: number;
-  coursePopularity: { courseId: string; title: string; subscriptions: number }[];
+  coursePopularity: {
+    courseId: string;
+    title: string;
+    subscriptions: number;
+  }[];
   averageLevelTestScore: number | null;
 }
 
@@ -36,13 +46,17 @@ function requireAdminBackend(): void {
   }
 }
 
-async function logAdminActivity(action: string, details: string): Promise<void> {
+async function logAdminActivity(
+  action: string,
+  details: string,
+): Promise<void> {
   const client = getSupabaseClient();
   const {
     data: { user },
     error: userError,
   } = await client.auth.getUser();
-  if (userError) throw new Error(`تعذّر التحقق من حساب المدير: ${userError.message}`);
+  if (userError)
+    throw new Error(`تعذّر التحقق من حساب المدير: ${userError.message}`);
   if (!user) throw new Error("انتهت جلسة المدير. سجّل الدخول مجددًا.");
   const { error } = await client.from("admin_activity_log").insert({
     actor_id: user.id,
@@ -54,37 +68,92 @@ async function logAdminActivity(action: string, details: string): Promise<void> 
 
 export async function getAdminOverview(): Promise<AdminOverview> {
   requireAdminBackend();
-  const client = getSupabaseClient();
-  const [profiles, courses, enrollments, orders, progress] = await Promise.all([
-    client
-      .from("profiles")
-      .select("id, full_name, email, phone, role, created_at")
-      .eq("role", "student")
-      .order("created_at", { ascending: false }),
-    client
-      .from("courses")
-      .select("*")
-      .order("created_at", { ascending: false }),
-    client.from("course_enrollments").select("user_id, course_id, created_at"),
-    client.from("orders").select("user_id, course_id, amount, status, created_at"),
-    client.from("student_progress").select("user_id, progress, updated_at"),
-  ]);
-  if (profiles.error) throw new Error(`تعذّر تحميل الطلاب: ${profiles.error.message}`);
-  if (courses.error) throw new Error(`تعذّر تحميل الكورسات: ${courses.error.message}`);
-  if (enrollments.error)
-    throw new Error(`تعذّر تحميل التسجيلات: ${enrollments.error.message}`);
-  if (orders.error) throw new Error(`تعذّر تحميل الطلبات: ${orders.error.message}`);
-  if (progress.error)
-    throw new Error(`تعذّر تحميل تقدّم الطلاب: ${progress.error.message}`);
+  const [profilesData, coursesData, enrollmentsData, ordersData, progressData] =
+    isBackendApiConfigured()
+      ? await (async () => {
+          const data = await backendRequest<{
+            profiles: StudentProfileRow[];
+            courses: ManagedCourse[];
+            enrollments: Array<{
+              user_id: string;
+              course_id: string;
+              created_at: string;
+            }>;
+            orders: Array<{
+              user_id: string;
+              course_id: string;
+              amount: number;
+              status: string;
+              created_at: string;
+            }>;
+            progress: Array<{
+              user_id: string;
+              progress: Database["public"]["Tables"]["student_progress"]["Row"]["progress"];
+              updated_at: string;
+            }>;
+          }>("/admin/overview");
+          return [
+            data.profiles,
+            data.courses,
+            data.enrollments,
+            data.orders,
+            data.progress,
+          ] as const;
+        })()
+      : await (async () => {
+          const client = getSupabaseClient();
+          const [profiles, courses, enrollments, orders, progress] =
+            await Promise.all([
+              client
+                .from("profiles")
+                .select("id, full_name, email, phone, role, created_at")
+                .eq("role", "student")
+                .order("created_at", { ascending: false }),
+              client
+                .from("courses")
+                .select("*")
+                .order("created_at", { ascending: false }),
+              client
+                .from("course_enrollments")
+                .select("user_id, course_id, created_at"),
+              client
+                .from("orders")
+                .select("user_id, course_id, amount, status, created_at"),
+              client
+                .from("student_progress")
+                .select("user_id, progress, updated_at"),
+            ]);
+          if (profiles.error)
+            throw new Error(`تعذّر تحميل الطلاب: ${profiles.error.message}`);
+          if (courses.error)
+            throw new Error(`تعذّر تحميل الكورسات: ${courses.error.message}`);
+          if (enrollments.error)
+            throw new Error(
+              `تعذّر تحميل التسجيلات: ${enrollments.error.message}`,
+            );
+          if (orders.error)
+            throw new Error(`تعذّر تحميل الطلبات: ${orders.error.message}`);
+          if (progress.error)
+            throw new Error(
+              `تعذّر تحميل تقدّم الطلاب: ${progress.error.message}`,
+            );
+          return [
+            profiles.data ?? [],
+            courses.data ?? [],
+            enrollments.data ?? [],
+            orders.data ?? [],
+            progress.data ?? [],
+          ] as const;
+        })();
 
-  const courseById = new Map((courses.data ?? []).map((course) => [course.id, course]));
+  const courseById = new Map(coursesData.map((course) => [course.id, course]));
   const enrollmentByUser = new Map<string, Map<string, string>>();
-  for (const enrollment of enrollments.data ?? []) {
+  for (const enrollment of enrollmentsData) {
     const byCourse = enrollmentByUser.get(enrollment.user_id) ?? new Map();
     byCourse.set(enrollment.course_id, "مسجل مجانًا");
     enrollmentByUser.set(enrollment.user_id, byCourse);
   }
-  const approvedOrders = (orders.data ?? []).filter(
+  const approvedOrders = ordersData.filter(
     (order) => order.status === "approved",
   );
   for (const order of approvedOrders) {
@@ -93,9 +162,9 @@ export async function getAdminOverview(): Promise<AdminOverview> {
     enrollmentByUser.set(order.user_id, byCourse);
   }
   const progressByUser = new Map(
-    (progress.data ?? []).map((record) => [record.user_id, record]),
+    progressData.map((record) => [record.user_id, record]),
   );
-  const students: AdminStudent[] = (profiles.data ?? []).map((profile) => {
+  const students: AdminStudent[] = profilesData.map((profile) => {
     const studentProgress = progressByUser.get(profile.id);
     const progressValue = studentProgress?.progress;
     const progressObject =
@@ -145,13 +214,13 @@ export async function getAdminOverview(): Promise<AdminOverview> {
     approvedOrders.map((order) => `${order.user_id}:${order.course_id}`),
   );
   const freeSubscriptions = new Set(
-    (enrollments.data ?? []).map(
+    enrollmentsData.map(
       (enrollment) => `${enrollment.user_id}:${enrollment.course_id}`,
     ),
   );
   const subscribersByCourse = new Map<string, Set<string>>();
   for (const { course_id, user_id } of [
-    ...(enrollments.data ?? []),
+    ...enrollmentsData,
     ...approvedOrders,
   ]) {
     const subscribers = subscribersByCourse.get(course_id) ?? new Set<string>();
@@ -164,26 +233,31 @@ export async function getAdminOverview(): Promise<AdminOverview> {
 
   return {
     students,
-    courses: courses.data ?? [],
-    pendingOrders: (orders.data ?? []).filter(
-      (order) => order.status === "pending",
-    ).length,
+    courses: coursesData,
+    pendingOrders: ordersData.filter((order) => order.status === "pending")
+      .length,
     approvedSubscriptions: new Set([
       ...approvedSubscriptions,
       ...freeSubscriptions,
     ]).size,
-    totalRevenue: approvedOrders.reduce((sum, order) => sum + Number(order.amount), 0),
+    totalRevenue: approvedOrders.reduce(
+      (sum, order) => sum + Number(order.amount),
+      0,
+    ),
     activeStudents: students.filter(
       (student) =>
         student.completedLessons > 0 ||
         student.watchedMinutes > 0 ||
         student.quizCount > 0,
     ).length,
-    coursePopularity: Array.from(subscribersByCourse, ([courseId, subscribers]) => ({
-      courseId,
-      title: courseById.get(courseId)?.title ?? "كورس محذوف",
-      subscriptions: subscribers.size,
-    })).sort((left, right) => right.subscriptions - left.subscriptions),
+    coursePopularity: Array.from(
+      subscribersByCourse,
+      ([courseId, subscribers]) => ({
+        courseId,
+        title: courseById.get(courseId)?.title ?? "كورس محذوف",
+        subscriptions: subscribers.size,
+      }),
+    ).sort((left, right) => right.subscriptions - left.subscriptions),
     averageLevelTestScore: levelTestScores.length
       ? Math.round(
           levelTestScores.reduce((sum, score) => sum + score, 0) /
@@ -198,6 +272,45 @@ export async function saveAdminCourse(
   courseId?: string,
 ): Promise<void> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    if (courseId) {
+      const {
+        title,
+        description,
+        price,
+        thumbnail_url,
+        is_free,
+        category,
+        level,
+        duration_text,
+        grade,
+        academic_system,
+        term,
+      } = input;
+      await backendRequest(`/admin/courses/${encodeURIComponent(courseId)}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          title,
+          description,
+          price,
+          thumbnail_url,
+          is_free,
+          category,
+          level,
+          duration_text,
+          grade,
+          academic_system,
+          term,
+        }),
+      });
+    } else {
+      await backendRequest("/admin/courses", {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
+    }
+    return;
+  }
   const client = getSupabaseClient();
   if (courseId) {
     const updates: Database["public"]["Tables"]["courses"]["Update"] = {
@@ -229,13 +342,20 @@ export async function saveAdminCourse(
 
 export async function deleteAdminCourse(courseId: string): Promise<void> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    await backendRequest(`/admin/courses/${encodeURIComponent(courseId)}`, {
+      method: "DELETE",
+    });
+    return;
+  }
   const client = getSupabaseClient();
   const { data: course, error: fetchError } = await client
     .from("courses")
     .select("title")
     .eq("id", courseId)
     .single();
-  if (fetchError) throw new Error(`تعذّر العثور على الكورس: ${fetchError.message}`);
+  if (fetchError)
+    throw new Error(`تعذّر العثور على الكورس: ${fetchError.message}`);
   const { error } = await client.from("courses").delete().eq("id", courseId);
   if (error)
     throw new Error(
@@ -246,6 +366,12 @@ export async function deleteAdminCourse(courseId: string): Promise<void> {
 
 export async function getAdminLessons(): Promise<ManagedLesson[]> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ lessons: ManagedLesson[] }>(
+      "/admin/lessons",
+    );
+    return result.lessons;
+  }
   const { data, error } = await getSupabaseClient()
     .from("lessons")
     .select("*")
@@ -260,6 +386,28 @@ export async function saveAdminLesson(
   lessonId?: string,
 ): Promise<void> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    if (lessonId) {
+      await backendRequest(`/admin/lessons/${encodeURIComponent(lessonId)}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          course_id: lesson.course_id,
+          title: lesson.title,
+          summary: lesson.summary,
+          video_src: lesson.video_src,
+          duration: lesson.duration,
+          key_points: lesson.key_points,
+          sort_order: lesson.sort_order,
+        }),
+      });
+    } else {
+      await backendRequest("/admin/lessons", {
+        method: "POST",
+        body: JSON.stringify(lesson),
+      });
+    }
+    return;
+  }
   const client = getSupabaseClient();
   if (lessonId) {
     const updates: Database["public"]["Tables"]["lessons"]["Update"] = {
@@ -287,13 +435,20 @@ export async function saveAdminLesson(
 
 export async function deleteAdminLesson(lessonId: string): Promise<void> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    await backendRequest(`/admin/lessons/${encodeURIComponent(lessonId)}`, {
+      method: "DELETE",
+    });
+    return;
+  }
   const client = getSupabaseClient();
   const { data: lesson, error: fetchError } = await client
     .from("lessons")
     .select("title")
     .eq("id", lessonId)
     .single();
-  if (fetchError) throw new Error(`تعذّر العثور على الدرس: ${fetchError.message}`);
+  if (fetchError)
+    throw new Error(`تعذّر العثور على الدرس: ${fetchError.message}`);
   const { error } = await client.from("lessons").delete().eq("id", lessonId);
   if (error) throw new Error(`تعذّر حذف الدرس: ${error.message}`);
   await logAdminActivity("حذف درس", lesson.title);
@@ -301,6 +456,12 @@ export async function deleteAdminLesson(lessonId: string): Promise<void> {
 
 export async function getAdminActivity(): Promise<AdminActivity[]> {
   requireAdminBackend();
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ activity: AdminActivity[] }>(
+      "/admin/activity",
+    );
+    return result.activity;
+  }
   const { data, error } = await getSupabaseClient()
     .from("admin_activity_log")
     .select("*")

@@ -38,6 +38,15 @@ export default tseslint.config(
     },
   },
   {
+    files: ["apps/windows/**/*.cjs"],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
     files: ["**/*.test.{ts,tsx}", "src/test/**"],
     languageOptions: { globals: { ...globals.browser, ...globals.vitest } },
   },

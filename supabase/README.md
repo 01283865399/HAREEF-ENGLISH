@@ -35,10 +35,14 @@
    `VITE_ORANGE_CASH_NUMBER` (defaults to `01283865399`), while Fawry uses
    `VITE_FAWRY_PAYMENT_CODE` (defaults to `5078086710757365`). Override them in
    the Vercel project's environment variables if needed, then redeploy.
-   Also set the server-only `GEMINI_API_KEY` for the AI chat endpoint. Never
-   prefix it with `VITE_`, expose a Supabase service-role key in the browser,
-   or commit secret values. Restart the Vite server after changing local
-   environment variables; redeploy after changing Vercel variables.
+   For the separate Next.js backend, set `SUPABASE_URL`, the same public
+   `SUPABASE_ANON_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`, and the allowed website
+   origins as documented in `../apps/backend/README.md`. Set the website's
+   `VITE_API_BASE` to the deployed backend origin, then redeploy the website.
+   Keep Gemini credentials only in the backend's server environment; never
+   prefix them with `VITE_`, expose a Supabase service-role key in the browser,
+   or commit secret values. Restart both local servers after changing their
+   environment variables.
 4. Create and confirm the administrator account, then run `promote-admin.sql`
    manually in the Supabase SQL Editor. It checks that the account exists and
    its email is confirmed before changing the profile role. This explicit

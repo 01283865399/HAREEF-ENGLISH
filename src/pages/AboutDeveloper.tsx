@@ -10,7 +10,7 @@ export function AboutDeveloperPage() {
       <section className={styles.hero}>
         <div className={styles.profileColumn}>
           <div className={styles.photoFrame}>
-            <img src={developerPhoto} alt="أحمد محمود منصور ديب" />
+            <img src={developerPhoto} alt="المهندس أحمد ديب" />
           </div>
           <span className={styles.profileBadge}>
             <Icon name="check" /> مطوّر المنصة
@@ -18,7 +18,7 @@ export function AboutDeveloperPage() {
         </div>
         <div className={styles.copy}>
           <span className={styles.eyebrow}>عن مطوّر المنصة</span>
-          <h1>أحمد محمود منصور ديب</h1>
+          <h1>المهندس أحمد ديب</h1>
           <p className={styles.lead}>
             طالب في كلية هندسة الذكاء الاصطناعي وعلوم الحاسوب.
           </p>

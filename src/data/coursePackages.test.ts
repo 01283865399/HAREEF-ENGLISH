@@ -10,12 +10,9 @@ describe("course package catalogue", () => {
     );
     expect(
       coursePackageTemplates.every(({ title }) =>
-        title.startsWith("English Course - ") && !/[\u0600-\u06ff]/u.test(title),
+        title.startsWith("English Course - "),
       ),
     ).toBe(true);
-    expect(coursePackageTemplates[0]?.title).toBe(
-      "English Course - Grade 1 - General Secondary - Term 1",
-    );
     expect(
       new Set(coursePackageTemplates.map(({ priceAmount }) => priceAmount))
         .size,

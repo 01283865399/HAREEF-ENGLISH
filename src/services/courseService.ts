@@ -18,6 +18,7 @@ import {
   type Database,
   type Json,
 } from "../lib/supabase";
+import { backendRequest, isBackendApiConfigured } from "./backendApi";
 import type {
   Course,
   FaqItem,
@@ -173,6 +174,17 @@ function mapLessonCatalogRow(row: LessonCatalogRow): Lesson {
 }
 
 export async function getCourses(): Promise<Course[]> {
+  if (isBackendApiConfigured()) {
+    const { courses: data } = await backendRequest<{ courses: CourseRow[] }>(
+      "/courses",
+      {},
+      false,
+    );
+    configuredFreeCourseIds = new Set(
+      data.filter((course) => course.is_free).map((course) => course.id),
+    );
+    return data.map(mapDatabaseCourse);
+  }
   if (!isSupabaseConfigured()) return mockRequest(() => courses);
   try {
     const { data, error } = await safeSupabaseQuery<CourseRow[]>(
@@ -186,7 +198,10 @@ export async function getCourses(): Promise<Course[]> {
       3,
     );
     if (error || !data || data.length === 0) {
-      console.warn("Supabase courses fetch failed/empty, fallback to seed courses:", error?.message);
+      console.warn(
+        "Supabase courses fetch failed/empty, fallback to seed courses:",
+        error?.message,
+      );
       return courses;
     }
     configuredFreeCourseIds = new Set(
@@ -200,18 +215,29 @@ export async function getCourses(): Promise<Course[]> {
 }
 
 export async function getLessons(): Promise<Lesson[]> {
+  if (isBackendApiConfigured()) {
+    const { lessons: data } = await backendRequest<{ lessons: LessonRow[] }>(
+      "/lessons",
+    );
+    return data.map(mapDatabaseLesson);
+  }
   if (!isSupabaseConfigured()) return mockRequest(() => lessons);
   try {
     const { data, error } = await safeSupabaseQuery<LessonRow[]>(
       async () =>
         await getSupabaseClient()
           .from("lessons")
-          .select("id, course_id, title, summary, video_src, duration, key_points")
+          .select(
+            "id, course_id, title, summary, video_src, duration, key_points",
+          )
           .order("sort_order", { ascending: true }),
       3,
     );
     if (error || !data || data.length === 0) {
-      console.warn("Supabase lessons fetch failed/empty, fallback to seed lessons:", error?.message);
+      console.warn(
+        "Supabase lessons fetch failed/empty, fallback to seed lessons:",
+        error?.message,
+      );
       return lessons;
     }
     return data.map(mapDatabaseLesson);
@@ -222,6 +248,12 @@ export async function getLessons(): Promise<Lesson[]> {
 }
 
 export async function getLessonCatalog(): Promise<Lesson[]> {
+  if (isBackendApiConfigured()) {
+    const { lessons: data } = await backendRequest<{
+      lessons: LessonCatalogRow[];
+    }>("/courses", {}, false);
+    return data.map(mapLessonCatalogRow);
+  }
   if (!isSupabaseConfigured()) return mockRequest(() => lessons);
   try {
     const { data, error } = await safeSupabaseQuery<LessonCatalogRow[]>(
@@ -229,7 +261,10 @@ export async function getLessonCatalog(): Promise<Lesson[]> {
       3,
     );
     if (error || !data || data.length === 0) {
-      console.warn("Supabase lesson catalog fetch failed/empty, fallback to seed lessons:", error?.message);
+      console.warn(
+        "Supabase lesson catalog fetch failed/empty, fallback to seed lessons:",
+        error?.message,
+      );
       return lessons;
     }
     return data.map(mapLessonCatalogRow);
@@ -240,6 +275,12 @@ export async function getLessonCatalog(): Promise<Lesson[]> {
 }
 
 export async function getLesson(lessonId: string): Promise<Lesson> {
+  if (isBackendApiConfigured()) {
+    const { lesson } = await backendRequest<{ lesson: LessonRow }>(
+      `/lessons/${encodeURIComponent(lessonId)}`,
+    );
+    return mapDatabaseLesson(lesson);
+  }
   if (isSupabaseConfigured()) {
     const { data: catalog, error: catalogError } =
       await getSupabaseClient().rpc("get_lesson_catalog");

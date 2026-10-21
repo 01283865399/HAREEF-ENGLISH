@@ -67,9 +67,10 @@ describe("LocalChatbot", () => {
     await finishTyping();
 
     expect(screen.getByText(/افتح تفاصيل الكورس/)).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "شوف الكورسات" }),
-    ).toHaveAttribute("href", "/courses");
+    expect(screen.getByRole("link", { name: "شوف الكورسات" })).toHaveAttribute(
+      "href",
+      "/courses",
+    );
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -82,7 +83,9 @@ describe("LocalChatbot", () => {
       await finishTyping();
 
       expect(
-        screen.getByText("المهندس أحمد محمود منصور ديب هو مطوّر المنصة."),
+        screen.getByText(
+          "المهندس أحمد ديب هو مطوّر المنصة. طالب في كلية هندسة الذكاء الاصطناعي وعلوم الحاسوب، ومطوّر Full Stack بيبني منصات ومواقع تعليمية ومتاجر إلكترونية.",
+        ),
       ).toBeInTheDocument();
       expect(
         screen.getByRole("link", { name: "تعرّف على المطوّر" }),
@@ -96,30 +99,20 @@ describe("LocalChatbot", () => {
       vi.fn().mockResolvedValue({
         ok: true,
         status: 200,
-        json: async () => ({ reply: "الإجابة الصحيحة هي:\nThe subject is the doer." }),
+        json: async () => ({ reply: "إجابة ذكية\nسطر ثانٍ" }),
       }),
     );
     renderChatbot();
     fireEvent.click(screen.getByRole("button", { name: "فتح ديب بوت AI" }));
-    expect(
-      screen.getByText(/هشرحلك بالعربي.*الدروس والأمثلة.*بالإنجليزي/),
-    ).toBeInTheDocument();
     ask("فسر لي مسألة غير موجودة في قاعدة المعلومات");
     await finishTyping();
 
+    expect(screen.getByText("إجابة ذكية")).toBeInTheDocument();
     expect(
       screen.getByText(
         (_, element) =>
           element?.tagName === "P" &&
-          element.textContent?.startsWith("الإجابة الصحيحة هي:") === true,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        (_, element) =>
-          element?.tagName === "P" &&
-          element.textContent ===
-            "الإجابة الصحيحة هي:\nThe subject is the doer.",
+          element.textContent === "إجابة ذكية\nسطر ثانٍ",
       ),
     ).toBeInTheDocument();
     expect(
@@ -154,9 +147,7 @@ describe("LocalChatbot", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "مسح محادثة مرشد المنصة" }),
     );
-    expect(
-      screen.getByText(/أنا مساعدك في English/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/أنا مساعدك في English/)).toBeInTheDocument();
     expect(window.localStorage.getItem(storageKey)).not.toContain(
       "السلام عليكم",
     );

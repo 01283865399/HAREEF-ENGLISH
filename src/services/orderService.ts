@@ -1,5 +1,10 @@
 import { getSupabaseClient } from "../lib/supabase";
 import { generateUuidV4 } from "../lib/uuid";
+import {
+  BackendApiError,
+  backendRequest,
+  isBackendApiConfigured,
+} from "./backendApi";
 import { getAdminDemoSession } from "./adminDemoService";
 
 export type PaymentMethod =
@@ -54,6 +59,12 @@ export interface StudentOrder {
 }
 
 export async function getStudentProfile(): Promise<StudentProfile> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ profile: StudentProfile }>(
+      "/me/profile",
+    );
+    return result.profile;
+  }
   const { data, error } = await getSupabaseClient()
     .from("profiles")
     .select("full_name, email, phone, role")
@@ -65,6 +76,12 @@ export async function getStudentProfile(): Promise<StudentProfile> {
 export async function getMyCourseOrderStatus(
   courseId: string,
 ): Promise<OrderStatus | null> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{
+      orders: Array<{ status: OrderStatus }>;
+    }>(`/orders?courseId=${encodeURIComponent(courseId)}`);
+    return result.orders[0]?.status ?? null;
+  }
   const { data, error } = await getSupabaseClient()
     .from("orders")
     .select("status")
@@ -78,6 +95,10 @@ export async function getMyCourseOrderStatus(
 
 export async function getMyOrders(): Promise<StudentOrder[]> {
   if (getAdminDemoSession()) return [];
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ orders: StudentOrder[] }>("/orders");
+    return result.orders;
+  }
   const { data, error } = await getSupabaseClient()
     .from("orders")
     .select(
@@ -112,6 +133,58 @@ export async function submitCourseOrder(input: {
   }
   if (input.receipt.size > 10 * 1024 * 1024) {
     throw new Error("يجب ألا يتجاوز حجم صورة الإيصال 10 ميجابايت.");
+  }
+
+  if (isBackendApiConfigured()) {
+    const {
+      data: { user },
+      error: userError,
+    } = await client.auth.getUser();
+    if (userError) {
+      throw new Error(`تعذّر التحقق من حسابك: ${userError.message}`);
+    }
+    if (!user) throw new Error("انتهت جلسة الدخول. سجّل الدخول مرة أخرى.");
+
+    const extension =
+      input.receipt.type === "image/jpeg"
+        ? "jpg"
+        : (input.receipt.type.split("/")[1] ?? "jpg");
+    const receiptPath = `${user.id}/${generateUuidV4()}.${extension}`;
+    const { error: uploadError } = await client.storage
+      .from("payment-receipts")
+      .upload(receiptPath, input.receipt, {
+        contentType: input.receipt.type,
+        upsert: false,
+      });
+    if (uploadError) {
+      throw new Error(`تعذّر رفع إيصال الدفع: ${uploadError.message}`);
+    }
+
+    try {
+      const result = await backendRequest<{ orderId: string }>("/orders", {
+        method: "POST",
+        body: JSON.stringify({
+          course_id: input.courseId,
+          phone,
+          payment_method: input.paymentMethod,
+          sender_wallet_number: senderWalletNumber,
+          receipt_image_path: receiptPath,
+        }),
+      });
+      return result.orderId;
+    } catch (reason) {
+      if (reason instanceof BackendApiError && reason.status < 500) {
+        const { error: cleanupError } = await client.storage
+          .from("payment-receipts")
+          .remove([receiptPath]);
+        if (cleanupError) {
+          throw new Error(
+            `تعذّر تسجيل الطلب (${reason.message}) أو تنظيف الإيصال المرفوع (${cleanupError.message}).`,
+          );
+        }
+      }
+      throw reason;
+    }
   }
 
   const { error: profileError } = await client
@@ -182,6 +255,12 @@ export async function submitCourseOrder(input: {
 }
 
 export async function canAccessCourse(courseId: string): Promise<boolean> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ canAccess: boolean }>(
+      `/me/course-access?courseId=${encodeURIComponent(courseId)}`,
+    );
+    return result.canAccess;
+  }
   const { data, error } = await getSupabaseClient().rpc("can_access_course", {
     p_course_id: courseId,
   });
@@ -192,6 +271,13 @@ export async function canAccessCourse(courseId: string): Promise<boolean> {
 export async function getSignedCourseVideoUrl(
   storagePath: string,
 ): Promise<string> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ url: string }>("/me/video-url", {
+      method: "POST",
+      body: JSON.stringify({ storagePath }),
+    });
+    return result.url;
+  }
   const { data, error } = await getSupabaseClient()
     .storage.from("course-videos")
     .createSignedUrl(storagePath, 60 * 60);
@@ -203,6 +289,12 @@ export async function getAdminOrders(
   status: OrderStatus,
 ): Promise<AdminOrder[]> {
   if (getAdminDemoSession()) return [];
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ orders: AdminOrder[] }>(
+      `/admin/orders?status=${encodeURIComponent(status)}`,
+    );
+    return result.orders;
+  }
   const { data, error } = await getSupabaseClient()
     .from("orders")
     .select(
@@ -224,6 +316,13 @@ export async function getAdminOrders(
 }
 
 export async function getReceiptUrl(path: string): Promise<string> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ url: string }>("/admin/receipt-url", {
+      method: "POST",
+      body: JSON.stringify({ path }),
+    });
+    return result.url;
+  }
   const { data, error } = await getSupabaseClient()
     .storage.from("payment-receipts")
     .createSignedUrl(path, 5 * 60);
@@ -235,6 +334,15 @@ export async function setOrderStatus(
   orderId: string,
   status: "approved" | "rejected",
 ): Promise<string | null> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ warning?: string }>("/admin/orders", {
+      method: "PATCH",
+      body: JSON.stringify({ id: orderId, status }),
+    });
+    return result.warning === "audit_log_failed"
+      ? "تم تحديث حالة الطلب، لكن تعذّر تسجيل الإجراء الإداري."
+      : null;
+  }
   const client = getSupabaseClient();
   const {
     data: { user },
@@ -264,6 +372,10 @@ export async function setOrderStatus(
 }
 
 export async function getAdminRole(): Promise<boolean> {
+  if (isBackendApiConfigured()) {
+    const result = await backendRequest<{ isAdmin: boolean }>("/admin/role");
+    return result.isAdmin;
+  }
   const { data, error } = await getSupabaseClient().rpc("is_admin");
   if (error)
     throw new Error(`تعذّر التحقق من صلاحية الإدارة: ${error.message}`);

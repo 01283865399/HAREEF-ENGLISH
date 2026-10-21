@@ -1,0 +1,49 @@
+{
+  "name": "hareef-english-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Hareef English",
+  "description": "Hareef English desktop WebView app",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable",
+    "dist:portable": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.hareefenglish.desktop",
+    "productName": "Hareef English",
+    "directories": {
+      "output": "artifacts"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "package.json"
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "حريف إنجليش",
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico"
+    },
+    "portable": {
+      "artifactName": "Hareef-English-Portable-${version}.${ext}"
+    },
+    "artifactName": "Hareef-English-Setup-${version}.${ext}"
+  }
+}
